@@ -83,6 +83,9 @@ desktop.ini
 *.backup
 *~
 
+# Reference papers (too large for GitHub)
+*.pdf
+
 # Coverage reports
 htmlcov/
 .tox/
