@@ -6,250 +6,240 @@
 ![Flask Version](https://img.shields.io/badge/flask-3.0.0-green)
 ![License](https://img.shields.io/badge/license-MIT-orange)
 
-一个用于机器学习模型偏见缓解和准确性提升的交互式可视化系统
+An interactive visual analytics system for bias mitigation and accuracy enhancement in machine learning models.
 
-[功能特性](#功能特性) • [快速开始](#快速开始) • [文档](#文档) • [截图](#截图)
+[Features](#features) • [Quick Start](#quick-start) • [Documentation](#documentation) • [API](#api-reference)
 
 </div>
 
 ---
 
-## 📖 项目简介
+## Overview
 
-BMWithAE 是一个专注于机器学习公平性的可视化分析系统。它提供了直观的Web界面，帮助数据科学家和研究人员：
+BMWithAE is a comprehensive visual analytics system designed to help data scientists and researchers identify, analyze, and mitigate bias in machine learning models while maintaining or improving model accuracy. The system provides an intuitive web interface for exploring data distributions, analyzing fairness metrics, and executing iterative debiasing processes.
 
-- 🔍 **探索数据偏见** - 交互式分析多维度偏见来源
-- ⚖️ **缓解算法偏见** - 迭代式偏见缓解过程
-- 📈 **提升模型准确性** - 在保证公平性的同时优化性能
-- 📊 **实时可视化** - 动态追踪指标演化过程
+## Features
 
-## ✨ 功能特性
+### Core Capabilities
 
-### 🎯 核心功能
+**Multidimensional Bias Analysis**
+- Statistical Parity
+- Equal Opportunity
+- Equalized Odds
+- Disparate Impact
 
-- **多维度偏见分析**
-  - Statistical Parity (统计平等性)
-  - Equal Opportunity (机会均等)
-  - Equalized Odds (均衡赔率)
-  - Disparate Impact (差异影响)
-  
-- **交互式数据探索**
-  - 动态特征分布可视化
-  - 子组分析和详细偏见指标
-  - 多受保护属性选择
-  - 实时偏见评分
+**Interactive Data Exploration**
+- Dynamic feature distribution visualization
+- Subgroup analysis with detailed bias metrics
+- Multiple protected attribute selection
+- Real-time bias scoring
 
-- **迭代式去偏过程**
-  - Bias Mitigation (偏见缓解)
-  - Accuracy Enhancement (准确性提升)
-  - 实时进度监控
-  - 历史记录追踪
+**Iterative Debiasing Process**
+- Bias Mitigation (BM) module
+- Accuracy Enhancement (AE) module
+- Real-time progress monitoring
+- Historical iteration tracking
 
-- **丰富的可视化**
-  - 双图表实时更新
-  - Max Epsilon 收敛追踪
-  - 准确率演化曲线
-  - 模态弹窗详细展示
+**Rich Visualizations**
+- Dual-chart real-time updates
+- Max Epsilon convergence tracking
+- Accuracy evolution curves
+- Modal dialogs for detailed metrics
 
-### 🛠️ 技术特性
+### Technical Stack
 
-- **后端**: Python + Flask + Pandas + Scikit-learn
-- **前端**: 原生 HTML/CSS/JavaScript (无需构建)
-- **机器学习**: 支持多种分类器 (XGBoost, LightGBM, CatBoost等)
-- **数据格式**: Excel (.xlsx), CSV
-- **API设计**: RESTful 架构
+- **Backend**: Python, Flask, Pandas, Scikit-learn
+- **Frontend**: Native HTML/CSS/JavaScript (no build required)
+- **Machine Learning**: Multiple classifiers (XGBoost, LightGBM, CatBoost)
+- **Data Formats**: Excel (.xlsx), CSV
+- **Architecture**: RESTful API design
 
-## 🚀 快速开始
+## Quick Start
 
-### 前置要求
+### Prerequisites
 
-- Python 3.8+
-- pip 包管理器
+- Python 3.8 or higher
+- pip package manager
 
-### 安装步骤
+### Installation
 
-1. **克隆仓库**
+1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/BMWithAE.git
+git clone https://github.com/KuumaSan/BMWithAE.git
 cd BMWithAE
 ```
 
-2. **创建虚拟环境**
+2. Create a virtual environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-3. **安装依赖**
+3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **启动后端服务**
+4. Start the backend server
 
 ```bash
 cd backend
 python app.py
 ```
 
-后端将在 `http://localhost:5000` 启动
+The backend will start at `http://localhost:5000`
 
-5. **打开前端界面**
+5. Open the frontend
 
-在浏览器中打开 `frontend/index.html`
-
-或使用本地服务器（推荐）：
+Open `frontend/index.html` in your browser, or serve it via a local server:
 
 ```bash
 cd frontend
 python -m http.server 8000
-# 访问 http://localhost:8000
+# Visit http://localhost:8000
 ```
 
-## 📚 文档
+## Documentation
 
-### 项目结构
+### Project Structure
 
 ```
 BMWithAE/
-├── backend/              # 后端Python代码
-│   ├── app.py           # Flask主应用
-│   ├── core_config.py   # 核心配置
-│   ├── module_BM.py     # 偏见缓解模块
-│   ├── module_AE.py     # 准确性提升模块
-│   ├── eval.py          # 评估模块
+├── backend/              # Backend Python code
+│   ├── app.py           # Flask main application
+│   ├── core_config.py   # Core configuration
+│   ├── module_BM.py     # Bias mitigation module
+│   ├── module_AE.py     # Accuracy enhancement module
+│   ├── eval.py          # Evaluation module
 │   └── ...
-├── frontend/            # 前端代码
-│   ├── index.html       # 主界面
-│   ├── styles.css       # 样式
-│   └── api.js           # API客户端
-├── data/                # 数据文件
-├── requirements.txt     # Python依赖
-└── README.md           # 本文件
+├── frontend/            # Frontend code
+│   ├── index.html       # Main interface
+│   ├── styles.css       # Stylesheet
+│   └── api.js           # API client
+├── data/                # Data files
+├── requirements.txt     # Python dependencies
+└── README.md           # This file
 ```
 
-### 使用指南
+### Usage Guide
 
-#### 1. 加载数据
+**Step 1: Load Data**
 
-- 点击 "Load Demo" 加载示例数据集
-- 或点击 "Upload Data" 上传自己的数据
+Click "Load Demo" to load the sample dataset, or click "Upload Data" to upload your own dataset.
 
-#### 2. 数据探索
+**Step 2: Explore Data**
 
-- 选择受保护属性（可多选）
-- 查看偏见评分和详细指标
-- 点击特征查看分布和子组分析
+- Select protected attributes (multiple selection supported)
+- View bias scores and detailed metrics
+- Click on features to see distributions and subgroup analysis
 
-#### 3. 配置参数
+**Step 3: Configure Parameters**
 
-- 点击 "Configuration" 设置去偏参数
-- 选择分类器、迭代次数、阈值等
+Click "Configuration" to set debiasing parameters including classifier selection, iteration count, and threshold values.
 
-#### 4. 执行去偏
+**Step 4: Execute Debiasing**
 
-- "Run All Steps": 自动执行所有迭代
-- "Step by Step": 单步执行，便于观察
+- "Run All Steps": Automatically execute all iterations
+- "Step by Step": Execute one iteration at a time for detailed observation
 
-#### 5. 查看结果
+**Step 5: View Results**
 
-- 左图: Max Epsilon / 公平性指标演化
-- 右图: 准确率演化
-- 下方: 迭代历史记录
+- Left chart: Max Epsilon / fairness metrics evolution
+- Right chart: Accuracy evolution
+- Below: Iteration history records
 
-### API文档
+## API Reference
 
-详细API文档请参考 [PROJECT_SETUP.md](PROJECT_SETUP.md)
+### Data Management
 
-主要端点：
+- `POST /api/upload` - Upload new dataset
+- `GET /api/datasets` - List available datasets
+- `GET /api/data/<dataset_id>/info` - Get dataset details
+- `POST /api/data/<dataset_id>/bias-metrics` - Calculate bias metrics
 
-- `POST /api/upload` - 上传数据
-- `POST /api/debias/init` - 初始化去偏任务
-- `POST /api/debias/<job_id>/step` - 执行迭代步骤
-- `GET /api/debias/<job_id>/status` - 获取任务状态
-- `POST /api/data/<dataset_id>/bias-metrics` - 计算偏见指标
+### Debiasing Process
 
-## 📸 截图
+- `POST /api/debias/init` - Initialize debiasing job
+- `POST /api/debias/<job_id>/step` - Execute one iteration
+- `GET /api/debias/<job_id>/status` - Get job status
+- `POST /api/debias/<job_id>/stop` - Stop job
 
-### 数据探索界面
-*交互式偏见分析和特征分布*
+### Configuration
 
-### 去偏过程可视化
-*实时追踪Max Epsilon和准确率演化*
+- `GET /api/config` - Get current configuration
+- `POST /api/config` - Update configuration
 
-### 子组分析
-*详细的偏见来源定位*
+For detailed API documentation, see [PROJECT_SETUP.md](PROJECT_SETUP.md)
 
-## ⚙️ 配置
+## Configuration
 
-主要配置参数在 `backend/core_config.py`:
+Main configuration parameters in `backend/core_config.py`:
 
 ```python
-PARAMS_MAIN_MAX_ITERATION = 20        # 最大迭代次数
-PARAMS_MAIN_THRESHOLD_EPSILON = 0.9   # Epsilon阈值
-PARAMS_MAIN_CLASSIFIER = 'XGB'        # 分类器选择
-PARAMS_MAIN_TRAINING_RATE = 0.7       # 训练集比例
+PARAMS_MAIN_MAX_ITERATION = 20        # Maximum iterations
+PARAMS_MAIN_THRESHOLD_EPSILON = 0.9   # Epsilon threshold
+PARAMS_MAIN_CLASSIFIER = 'XGB'        # Classifier selection
+PARAMS_MAIN_TRAINING_RATE = 0.7       # Training set ratio
 ```
 
-## 🐛 故障排除
+## Troubleshooting
 
-### 端口冲突
+### Port Conflict
 
-```bash
-# 修改 backend/backend_config.py 中的端口
-PORT = 5001  # 改为其他端口
+Modify the port in `backend/backend_config.py`:
+
+```python
+PORT = 5001  # Change to another port
 ```
 
-### 依赖安装失败
+### Dependency Installation Issues
 
 ```bash
-# 升级pip
+# Upgrade pip
 pip install --upgrade pip
 
-# 单独安装问题包
+# Install problematic packages separately
 pip install xgboost --no-cache-dir
 ```
 
-### CORS错误
+### CORS Errors
 
-确保后端正确启动并且 Flask-CORS 已配置
+Ensure the backend is running and Flask-CORS is properly configured.
 
-## 🤝 贡献
+## Contributing
 
-欢迎贡献！请遵循以下步骤：
+Contributions are welcome! Please follow these steps:
 
-1. Fork 本仓库
-2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 许可证
+## License
 
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📬 联系方式
+## Contact
 
-如有问题或建议，请通过以下方式联系：
+For questions or suggestions:
 
-- 提交 Issue: [GitHub Issues](https://github.com/yourusername/BMWithAE/issues)
+- Submit an Issue: [GitHub Issues](https://github.com/KuumaSan/BMWithAE/issues)
 - Email: your.email@example.com
 
-## 🙏 致谢
+## Acknowledgments
 
-- 参考了 FairSight 和 FairVis 的可视化设计
-- 基于公平机器学习的前沿研究
-- 感谢开源社区的支持
+- Inspired by FairSight and FairVis visual analytics systems
+- Based on fairness in machine learning research
+- Thanks to the open-source community
 
 ---
 
 <div align="center">
 
-**[⬆ 回到顶部](#bmwithae---bias-mitigation-with-accuracy-enhancement)**
-
-Made with ❤️ for Fair ML
+Made with care for Fair ML
 
 </div>
