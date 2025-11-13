@@ -1,0 +1,66 @@
+# ============================================
+# BMWithAE - Bias Mitigation with Accuracy Enhancement
+# Requirements File
+# ============================================
+
+# Web Framework
+Flask==3.0.0
+Flask-CORS==4.0.0
+Werkzeug==3.0.1
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+openpyxl>=3.1.0  # For Excel file support
+
+# Machine Learning - Core
+scikit-learn>=1.3.0
+
+# Machine Learning - Boosting Libraries
+xgboost>=2.0.0
+lightgbm>=4.0.0
+catboost>=1.2.0
+
+# Development Tools
+python-dotenv>=1.0.0  # For environment variables (optional)
+
+# ============================================
+# Python Version Requirement
+# ============================================
+# Python >= 3.8
+
+# ============================================
+# Installation Instructions
+# ============================================
+# 
+# 1. Create virtual environment (recommended):
+#    python -m venv venv
+#    source venv/bin/activate  # On Windows: venv\Scripts\activate
+#
+# 2. Install requirements:
+#    pip install -r requirements.txt
+#
+# 3. Run backend server:
+#    cd backend
+#    python app.py
+#
+# 4. Open frontend in browser:
+#    Open frontend/index.html in a web browser
+#    or serve via a local server (e.g., python -m http.server 8000)
+#
+# ============================================
+# Notes
+# ============================================
+#
+# - Flask: Web framework for backend API
+# - Flask-CORS: Handle Cross-Origin Resource Sharing
+# - pandas: Data manipulation and analysis
+# - numpy: Numerical computing
+# - openpyxl: Read/write Excel files (.xlsx)
+# - scikit-learn: Machine learning algorithms and utilities
+# - xgboost, lightgbm, catboost: Advanced boosting algorithms
+#
+# For production deployment, consider pinning exact versions
+# by running: pip freeze > requirements.txt
+#
+

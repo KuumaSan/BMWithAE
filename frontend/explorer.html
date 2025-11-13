@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BMWithAE — Data Explorer</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="explorer.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__row">
+      <div class="brand">
+        <span class="brand__mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Central pole -->
+            <line x1="12" y1="4" x2="12" y2="20"/>
+            <!-- Balance beam -->
+            <line x1="5" y1="7" x2="19" y2="7"/>
+            <!-- Left pan -->
+            <path d="M5 7 L3 13 L7 13 Z" fill="currentColor" opacity="0.3"/>
+            <!-- Right pan -->
+            <path d="M19 7 L17 13 L21 13 Z" fill="currentColor" opacity="0.3"/>
+            <!-- Base -->
+            <line x1="9" y1="20" x2="15" y2="20" stroke-width="2.5"/>
+          </svg>
+        </span>
+        <span class="brand__name">BMWithAE</span>
+      </div>
+      <nav class="nav">
+        <button class="btn btn--ghost" id="btnBack">← Back to Home</button>
+        <button class="btn btn--ghost" id="btnDocs">Docs</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="explorer-container">
+    <!-- Left Sidebar: Controls -->
+    <aside class="explorer-sidebar">
+      <!-- Dataset Info -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Dataset Overview</h3>
+        <div class="info-card">
+          <div class="info-item">
+            <span class="info-label">Dataset</span>
+            <span class="info-value" id="datasetName">COMPAS Recidivism</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Total Samples</span>
+            <span class="info-value" id="sampleCount">7,214</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Features</span>
+            <span class="info-value" id="featureCount">7</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Positive Rate</span>
+            <span class="info-value">45.3%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Grouping -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Primary Grouping</h3>
+        <div class="group-selector">
+          <label class="radio-group">
+            <input type="radio" name="primary" value="race" checked>
+            <span class="radio-label">
+              <strong>Race</strong>
+              <small>4 groups</small>
+            </span>
+          </label>
+          <label class="radio-group">
+            <input type="radio" name="primary" value="sex">
+            <span class="radio-label">
+              <strong>Sex</strong>
+              <small>2 groups</small>
+            </span>
+          </label>
+          <label class="radio-group">
+            <input type="radio" name="primary" value="age">
+            <span class="radio-label">
+              <strong>Age Group</strong>
+              <small>3 groups</small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Subgroup Filters with Distribution -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">
+          Subgroup Filters
+          <button class="btn btn--soft btn--sm" style="margin-left:auto;">Generate Subgroups</button>
+        </h3>
+        
+        <!-- Age Distribution -->
+        <div class="filter-group">
+          <div class="filter-label">
+            <span>Age</span>
+            <span class="feature-type">Continuous</span>
+          </div>
+          <div class="filter-content">
+            <div class="distribution-chart" id="ageChart">
+              <div class="histogram-bars">
+                <div class="histogram-bar" style="height: 30%;">
+                  <span class="bar-tooltip">18-25: 126</span>
+                </div>
+                <div class="histogram-bar" style="height: 50%;">
+                  <span class="bar-tooltip">26-35: 287</span>
+                </div>
+                <div class="histogram-bar" style="height: 85%;">
+                  <span class="bar-tooltip">36-45: 548</span>
+                </div>
+                <div class="histogram-bar" style="height: 65%;">
+                  <span class="bar-tooltip">46-55: 412</span>
+                </div>
+                <div class="histogram-bar" style="height: 40%;">
+                  <span class="bar-tooltip">56-65: 198</span>
+                </div>
+                <div class="histogram-bar" style="height: 20%;">
+                  <span class="bar-tooltip">66+: 93</span>
+                </div>
+              </div>
+            </div>
+            <div class="range-info">
+              <span>Min: 18</span>
+              <span>Max: 96</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charge Degree Distribution -->
+        <div class="filter-group collapsed">
+          <div class="filter-label">
+            <span>Charge Degree</span>
+            <span class="feature-type">Categorical</span>
+          </div>
+          <div class="filter-content">
+            <div class="distribution-chart" id="chargeChart">
+              <div class="histogram-bars">
+                <div class="histogram-bar" style="height: 75%;">
+                  <span class="bar-tooltip">Felony: 4,315</span>
+                </div>
+                <div class="histogram-bar" style="height: 45%;">
+                  <span class="bar-tooltip">Misdemeanor: 2,899</span>
+                </div>
+              </div>
+            </div>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" checked>
+                <span>Felony <span class="count">(4,315)</span></span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" checked>
+                <span>Misdemeanor <span class="count">(2,899)</span></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Race Distribution -->
+        <div class="filter-group collapsed">
+          <div class="filter-label">
+            <span>Race</span>
+            <span class="feature-type">Categorical</span>
+          </div>
+          <div class="filter-content">
+            <div class="distribution-chart" id="raceChart">
+              <div class="histogram-bars">
+                <div class="histogram-bar" style="height: 85%;">
+                  <span class="bar-tooltip">African-American: 3,175</span>
+                </div>
+                <div class="histogram-bar" style="height: 60%;">
+                  <span class="bar-tooltip">Caucasian: 2,103</span>
+                </div>
+                <div class="histogram-bar" style="height: 25%;">
+                  <span class="bar-tooltip">Hispanic: 509</span>
+                </div>
+                <div class="histogram-bar" style="height: 18%;">
+                  <span class="bar-tooltip">Other: 377</span>
+                </div>
+              </div>
+            </div>
+            <div class="checkbox-group">
+              <label class="checkbox-item checked">
+                <input type="checkbox" checked>
+                <span>African-American <span class="count">(3,175)</span></span>
+              </label>
+              <label class="checkbox-item checked">
+                <input type="checkbox" checked>
+                <span>Caucasian <span class="count">(2,103)</span></span>
+              </label>
+              <label class="checkbox-item checked">
+                <input type="checkbox" checked>
+                <span>Hispanic <span class="count">(509)</span></span>
+              </label>
+              <label class="checkbox-item checked">
+                <input type="checkbox" checked>
+                <span>Other <span class="count">(377)</span></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sex Distribution -->
+        <div class="filter-group collapsed">
+          <div class="filter-label">
+            <span>Sex</span>
+            <span class="feature-type">Binary</span>
+          </div>
+          <div class="filter-content">
+            <div class="distribution-chart" id="sexChart">
+              <div class="histogram-bars">
+                <div class="histogram-bar" style="height: 90%;">
+                  <span class="bar-tooltip">Male: 5,278</span>
+                </div>
+                <div class="histogram-bar" style="height: 35%;">
+                  <span class="bar-tooltip">Female: 1,936</span>
+                </div>
+              </div>
+            </div>
+            <div class="checkbox-group">
+              <label class="checkbox-item checked">
+                <input type="checkbox" checked>
+                <span>Male <span class="count">(5,278)</span></span>
+              </label>
+              <label class="checkbox-item checked">
+                <input type="checkbox" checked>
+                <span>Female <span class="count">(1,936)</span></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Intersectional Analysis -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Intersectional Analysis</h3>
+        <label class="checkbox-item">
+          <input type="checkbox" id="intersectional">
+          <span>Enable Cross-Group Analysis</span>
+        </label>
+        <p class="help-text">Compare combinations like "African-American Male" vs "Caucasian Female"</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="sidebar-section">
+        <div class="action-buttons">
+          <button class="btn btn--primary btn--full">Apply Filters</button>
+          <button class="btn btn--ghost btn--full">Reset All</button>
+          <button class="btn btn--soft btn--full">Export Results</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content: Visualizations -->
+    <div class="explorer-main">
+      <!-- Top: Fairness Metrics Dashboard -->
+      <section class="metrics-panel">
+        <div class="panel-header">
+          <h2 class="section-heading">Fairness Metrics Dashboard</h2>
+          <div class="metric-controls">
+            <button class="toggle-btn active">Disparity</button>
+            <button class="toggle-btn">Ratio</button>
+            <button class="info-btn" title="Learn more about metrics">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-name">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Demographic Parity
+              </span>
+              <span class="metric-badge metric-badge--warning">0.18</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 18%;"></div>
+            </div>
+            <p class="metric-desc">Selection rate difference across groups</p>
+            <div class="metric-details">
+              <span>African-American: 0.48</span>
+              <span>Caucasian: 0.30</span>
+            </div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-name">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                Equal Opportunity
+              </span>
+              <span class="metric-badge metric-badge--success">0.05</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-fill metric-fill--success" style="width: 5%;"></div>
+            </div>
+            <p class="metric-desc">True positive rate parity</p>
+            <div class="metric-details">
+              <span>Max TPR: 0.72</span>
+              <span>Min TPR: 0.67</span>
+            </div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-name">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                Predictive Parity
+              </span>
+              <span class="metric-badge metric-badge--danger">0.24</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-fill metric-fill--danger" style="width: 24%;"></div>
+            </div>
+            <p class="metric-desc">Precision difference across groups</p>
+            <div class="metric-details">
+              <span>Max Precision: 0.70</span>
+              <span>Min Precision: 0.46</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-name">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="9" y1="3" x2="9" y2="21"/>
+                  <line x1="15" y1="3" x2="15" y2="21"/>
+                </svg>
+                Equalized Odds
+              </span>
+              <span class="metric-badge metric-badge--warning">0.12</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 12%;"></div>
+            </div>
+            <p class="metric-desc">TPR and FPR parity combined</p>
+            <div class="metric-details">
+              <span>TPR Diff: 0.05</span>
+              <span>FPR Diff: 0.07</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-name">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="16 12 12 8 8 12"/>
+                  <line x1="12" y1="16" x2="12" y2="8"/>
+                </svg>
+                Calibration
+              </span>
+              <span class="metric-badge metric-badge--success">0.03</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-fill metric-fill--success" style="width: 3%;"></div>
+            </div>
+            <p class="metric-desc">Score calibration across groups</p>
+            <div class="metric-details">
+              <span>Well Calibrated</span>
+              <span>RMSE: 0.03</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-name">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <polyline points="7.5 4.21 12 6.81 16.5 4.21"/>
+                  <polyline points="7.5 19.79 7.5 14.6 3 12"/>
+                  <polyline points="21 12 16.5 14.6 16.5 19.79"/>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                  <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+                Overall Fairness Score
+              </span>
+              <span class="metric-badge metric-badge--warning">0.67</span>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-fill" style="width: 67%;"></div>
+            </div>
+            <p class="metric-desc">Composite fairness metric (0-1)</p>
+            <div class="metric-details">
+              <span>Moderate Fairness</span>
+              <span>6/6 metrics</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Middle: Distribution Views -->
+      <div class="viz-grid">
+        <section class="viz-panel">
+          <div class="panel-header">
+            <h3>Feature Distribution</h3>
+            <button class="icon-btn" title="Fullscreen">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+              </svg>
+            </button>
+          </div>
+          <div class="viz-content">
+            <div class="placeholder-chart">
+              <svg width="100%" height="200" viewBox="0 0 400 200">
+                <rect x="50" y="150" width="40" height="50" fill="#2563eb" opacity="0.8"/>
+                <rect x="110" y="120" width="40" height="80" fill="#7c3aed" opacity="0.8"/>
+                <rect x="170" y="90" width="40" height="110" fill="#2563eb" opacity="0.8"/>
+                <rect x="230" y="70" width="40" height="130" fill="#7c3aed" opacity="0.8"/>
+                <rect x="290" y="100" width="40" height="100" fill="#2563eb" opacity="0.8"/>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section class="viz-panel">
+          <div class="panel-header">
+            <h3>Group Comparison</h3>
+            <button class="icon-btn" title="Fullscreen">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+              </svg>
+            </button>
+          </div>
+          <div class="viz-content">
+            <div class="placeholder-chart">
+              <svg width="100%" height="200" viewBox="0 0 400 200">
+                <circle cx="100" cy="100" r="70" fill="#2563eb" opacity="0.3"/>
+                <circle cx="150" cy="100" r="80" fill="#7c3aed" opacity="0.3"/>
+                <circle cx="280" cy="100" r="65" fill="#10b981" opacity="0.3"/>
+              </svg>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Bottom: Performance Matrix -->
+      <section class="matrix-panel">
+        <div class="panel-header">
+          <h3>Performance by Subgroup</h3>
+          <div class="panel-controls">
+            <select class="metric-selector">
+              <option>Accuracy</option>
+              <option>Precision</option>
+              <option>Recall</option>
+              <option>F1 Score</option>
+            </select>
+          </div>
+        </div>
+        <div class="matrix-content">
+          <table class="performance-matrix">
+            <thead>
+              <tr>
+                <th>Group</th>
+                <th>Accuracy</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1 Score</th>
+                <th>Support</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="group-label">African-American</span></td>
+                <td>0.67</td>
+                <td>0.65</td>
+                <td>0.71</td>
+                <td>0.68</td>
+                <td>3,175</td>
+              </tr>
+              <tr>
+                <td><span class="group-label">Caucasian</span></td>
+                <td>0.69</td>
+                <td>0.70</td>
+                <td>0.66</td>
+                <td>0.68</td>
+                <td>2,103</td>
+              </tr>
+              <tr>
+                <td><span class="group-label">Hispanic</span></td>
+                <td>0.68</td>
+                <td>0.67</td>
+                <td>0.68</td>
+                <td>0.67</td>
+                <td>509</td>
+              </tr>
+              <tr>
+                <td><span class="group-label">Other</span></td>
+                <td>0.66</td>
+                <td>0.64</td>
+                <td>0.70</td>
+                <td>0.67</td>
+                <td>377</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Navigation
+    document.getElementById('btnBack').addEventListener('click', ()=> {
+      window.location.href = 'index.html';
+    });
+    
+    document.getElementById('btnDocs').addEventListener('click', ()=> {
+      alert('Documentation (coming soon)');
+    });
+
+    // Accordion functionality for filter groups
+    document.querySelectorAll('.filter-label').forEach(label => {
+      label.addEventListener('click', function() {
+        const filterGroup = this.parentElement;
+        filterGroup.classList.toggle('collapsed');
+      });
+    });
+
+    // Histogram bar interaction
+    document.querySelectorAll('.histogram-bar').forEach(bar => {
+      bar.addEventListener('click', function() {
+        this.classList.toggle('selected');
+      });
+    });
+
+    // Checkbox interaction
+    document.querySelectorAll('.checkbox-item input').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const item = this.closest('.checkbox-item');
+        if(this.checked) {
+          item.classList.add('checked');
+        } else {
+          item.classList.remove('checked');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

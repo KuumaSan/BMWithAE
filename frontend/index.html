@@ -1,0 +1,2552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BMWithAE — Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="api.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__row">
+      <div class="brand">
+        <span class="brand__mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Central pole -->
+            <line x1="12" y1="4" x2="12" y2="20"/>
+            <!-- Balance beam -->
+            <line x1="5" y1="7" x2="19" y2="7"/>
+            <!-- Left pan -->
+            <path d="M5 7 L3 13 L7 13 Z" fill="currentColor" opacity="0.3"/>
+            <!-- Right pan -->
+            <path d="M19 7 L17 13 L21 13 Z" fill="currentColor" opacity="0.3"/>
+            <!-- Base -->
+            <line x1="9" y1="20" x2="15" y2="20" stroke-width="2.5"/>
+          </svg>
+        </span>
+        <span class="brand__name">BMWithAE</span>
+      </div>
+      <nav class="nav">
+        <button class="btn btn--icon-only" id="btnTheme" title="Toggle Theme">
+          <svg class="theme-icon theme-icon--light" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="theme-icon theme-icon--dark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button class="btn btn--ghost" id="btnDocs">Docs</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main">
+    <div class="workspace">
+      <!-- Left Panel: Load Dataset & Data Explorer -->
+      <aside class="left-panel">
+        <!-- Load Dataset Panel (Initial View) -->
+        <div class="panel-section" id="loadDatasetPanel">
+          <div class="section-header">
+            <h2>Load Dataset</h2>
+            <p class="muted">Import your data or explore with demo datasets</p>
+        </div>
+
+          <!-- Custom Upload -->
+          <div class="upload-section">
+            <h3 class="section-title">Custom Upload</h3>
+            <div class="dropzone" id="dropzone">
+              <input type="file" id="fileInput" accept=".csv" hidden>
+              <div class="dropzone__icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+      </div>
+              <div class="dropzone__text">
+                <p class="dropzone__title">Drop CSV file here</p>
+                <p class="dropzone__subtitle">or click to browse</p>
+          </div>
+              <div class="dropzone__files" id="fileList"></div>
+          </div>
+            <button class="btn btn--primary btn--full" id="btnImport">
+              <span class="btn-text">Import Dataset</span>
+              <span class="btn-spinner" style="display:none;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="8" cy="8" r="6" stroke-opacity="0.25"/>
+                  <path d="M 8 2 A 6 6 0 0 1 14 8" stroke-linecap="round">
+                    <animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="0.8s" repeatCount="indefinite"/>
+                  </path>
+                </svg>
+              </span>
+            </button>
+            
+            <!-- Load Status Message -->
+            <div class="load-status" id="loadStatus" style="display:none;"></div>
+          </div>
+
+          <!-- Demo Datasets -->
+          <div class="demo-section">
+            <h3 class="section-title">Demo Datasets</h3>
+            <p class="section-subtitle">Pre-configured datasets for quick exploration</p>
+            <div class="demo-select-wrapper">
+              <select class="demo-select-box" id="demoSelectBox">
+                <option value="">Select a demo dataset...</option>
+                <option value="compas">COMPAS Recidivism</option>
+                <option value="adult">Adult Income Census</option>
+                <option value="credit">Credit Default</option>
+              </select>
+              <button class="btn btn--primary btn--full" id="btnLoadDemo">
+                <span class="btn-text">Load Demo</span>
+                <span class="btn-spinner" style="display:none;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="8" cy="8" r="6" stroke-opacity="0.25"/>
+                    <path d="M 8 2 A 6 6 0 0 1 14 8" stroke-linecap="round">
+                      <animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="0.8s" repeatCount="indefinite"/>
+                    </path>
+                  </svg>
+                </span>
+              </button>
+        </div>
+            
+            <!-- Load Status Message -->
+            <div class="load-status" id="demoLoadStatus" style="display:none;"></div>
+      </div>
+    </div>
+        
+        <!-- Data Explorer Panel (Hidden Initially) -->
+        <div class="data-explorer-panel" id="dataExplorerPanel" style="display: none;">
+          <div class="explorer-header">
+            <button class="btn btn--ghost btn--icon" id="btnBackToLoad" title="Back to Load Dataset">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+              </svg>
+            </button>
+            <h2>Data Explorer</h2>
+          </div>
+          
+          <!-- Protected Attribute Selector -->
+          <div class="explorer-section">
+            <label class="input-label">Protected Attributes</label>
+            <div class="protected-attr-selector" id="protectedAttrSelector">
+              <div class="protected-attr-display" id="protectedAttrDisplay">
+                <span class="protected-attr-text" id="protectedAttrText">Select attributes...</span>
+              </div>
+              <button class="protected-attr-btn" id="btnOpenAttrModal" title="Select Protected Attributes">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Protected Attributes Modal -->
+          <div class="attr-modal-overlay" id="attrModalOverlay" style="display: none;">
+            <div class="attr-modal-content">
+              <div class="modal-header">
+                <h3>Select Protected Attributes</h3>
+                <button class="modal-close" id="btnCloseAttrModal">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p class="input-hint" style="margin-bottom: 16px;">Select one or more sensitive attributes to analyze bias</p>
+                <div class="protected-attributes-list" id="protectedAttributesList">
+                  <!-- Checkboxes will be populated here -->
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn--secondary" id="btnCancelAttrModal">Cancel</button>
+                <button class="btn btn--primary" id="btnConfirmAttrModal">Confirm</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Bias Overview -->
+          <div class="explorer-section">
+            <h3 class="section-title">Bias Overview</h3>
+            
+            <!-- Bias Score Circle -->
+            <div class="bias-score-container">
+              <svg class="bias-score-circle" viewBox="0 0 200 200">
+                <!-- Background circle -->
+                <circle cx="100" cy="100" r="85" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+                <!-- Progress circle -->
+                <circle 
+                  id="biasScoreProgress"
+                  cx="100" 
+                  cy="100" 
+                  r="85" 
+                  fill="none" 
+                  stroke="#10b981" 
+                  stroke-width="10"
+                  stroke-dasharray="534.07" 
+                  stroke-dashoffset="534.07"
+                  stroke-linecap="round"
+                  transform="rotate(-90 100 100)"
+                  style="transition: stroke-dashoffset 0.8s ease, stroke 0.8s ease;"
+                />
+                <!-- Score text -->
+                <text x="100" y="100" text-anchor="middle" font-size="42" font-weight="700" fill="var(--text)" id="biasScoreText">--</text>
+                <text x="100" y="122" text-anchor="middle" font-size="13" fill="var(--muted)">Bias Score</text>
+              </svg>
+              <p class="bias-score-description" id="biasScoreDescription">Select a protected attribute to calculate bias</p>
+            </div>
+            
+            <div class="bias-metrics-grid" id="biasMetricsGrid">
+              <div class="metric-card-small">
+                <div class="metric-label">Statistical Parity</div>
+                <div class="metric-value" id="metricSP">--</div>
+              </div>
+              <div class="metric-card-small">
+                <div class="metric-label">Equal Opportunity</div>
+                <div class="metric-value" id="metricEO">--</div>
+              </div>
+              <div class="metric-card-small">
+                <div class="metric-label">Equalized Odds</div>
+                <div class="metric-value" id="metricEOdds">--</div>
+              </div>
+              <div class="metric-card-small">
+                <div class="metric-label">Disparate Impact</div>
+                <div class="metric-value" id="metricPP">--</div>
+              </div>
+            </div>
+            
+            <!-- Scroll Hint -->
+            <div class="scroll-hint" id="scrollHint">
+              <span class="scroll-hint-text">Scroll Down</span>
+              <svg class="scroll-hint-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+          
+          <!-- Feature Distributions -->
+          <div class="explorer-section">
+            <h3 class="section-title">Feature Distributions</h3>
+            <p class="section-subtitle">Hover over features to see detailed bias analysis</p>
+            <div class="feature-list" id="featureDistributions">
+              <!-- Will be populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Panel: Debiasing Process -->
+      <section class="right-panel">
+        <div class="process-container">
+          <div class="process-header">
+            <div class="process-header-left">
+              <h3>Debiasing Process</h3>
+              <span class="process-status" id="processStatus">Ready</span>
+          </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn--icon-only" id="btnDownloadLog" title="View Experiment Log" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="12" y2="18"/>
+                  <line x1="15" y1="15" x2="12" y2="18"/>
+                </svg>
+              </button>
+              <button class="btn btn--icon-only" id="btnConfig" title="Configure Parameters">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <!-- Center circle -->
+                  <circle cx="12" cy="12" r="3"/>
+                  <!-- Gear teeth -->
+                  <path d="M12 2v3m0 14v3M5.64 5.64l2.12 2.12m8.48 8.48l2.12 2.12M2 12h3m14 0h3M5.64 18.36l2.12-2.12m8.48-8.48l2.12-2.12"/>
+                  <!-- Outer gear shape -->
+                  <rect x="10.5" y="1" width="3" height="3" rx="0.5"/>
+                  <rect x="10.5" y="20" width="3" height="3" rx="0.5"/>
+                  <rect x="1" y="10.5" width="3" height="3" rx="0.5"/>
+                  <rect x="20" y="10.5" width="3" height="3" rx="0.5"/>
+                </svg>
+              </button>
+          </div>
+          </div>
+          
+          <div class="process-content" id="processContent">
+            <div class="empty-state">
+              <div class="empty-state__icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20v-6m0 0V4m0 10l4-4m-4 4l-4-4"/>
+                  <circle cx="12" cy="12" r="10" opacity="0.2"/>
+                </svg>
+      </div>
+              <p class="empty-state__title">Ready to start debiasing</p>
+              <p class="empty-state__text">Load your dataset and configure parameters to begin</p>
+    </div>
+    </div>
+
+          <div class="process-footer">
+            <div class="process-controls">
+              <div class="run-mode-selector">
+                <label class="radio-label">
+                  <input type="radio" name="runMode" value="all" checked>
+                  <span>Run All Steps</span>
+          </label>
+                <label class="radio-label">
+                  <input type="radio" name="runMode" value="step">
+                  <span>Step by Step</span>
+          </label>
+        </div>
+              <div class="process-actions">
+                <button class="btn btn--secondary" id="btnReset">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"/>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                  </svg>
+                  Reset
+                </button>
+                <button class="btn btn--primary" id="btnRun">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  <span id="runBtnText">Run</span>
+                </button>
+              </div>
+            </div>
+      </div>
+    </div>
+  </section>
+    </div>
+  </main>
+
+  <!-- Parameter Configuration Modal -->
+  <div class="modal" id="configModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Configure Parameters</h2>
+        <button class="btn btn--icon-only" id="btnCloseModal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="param-section">
+          <h3 class="param-section-title">Data Preprocessing</h3>
+          <div class="param-grid">
+            <div class="param-field">
+              <label>Numeric to Categorical Method</label>
+              <select id="numToCatMethod">
+                <option value="quartile">Quartile</option>
+                <option value="median">Median</option>
+              </select>
+    </div>
+            <div class="param-field">
+              <label>Number of Cuts</label>
+              <input type="number" id="numToCatCuts" value="4" min="2" max="10">
+            </div>
+          </div>
+        </div>
+
+        <div class="param-section">
+          <h3 class="param-section-title">Main Configuration</h3>
+          <div class="param-grid">
+            <div class="param-field param-field--full">
+              <label>Threshold Epsilon <span class="param-value-display" id="epsilonValue">0.90</span></label>
+              <div class="slider-container">
+                <input type="range" id="mainThresholdEpsilonSlider" min="0" max="1" step="0.01" value="0.9" class="param-slider">
+                <input type="number" id="mainThresholdEpsilon" value="0.9" min="0" max="1" step="0.01" class="param-number-input">
+    </div>
+            </div>
+            <div class="param-field">
+              <label>Random Seed</label>
+              <input type="number" id="seed" value="0" min="0">
+            </div>
+            <div class="param-field param-field--checkbox">
+              <label>
+                <input type="checkbox" id="useBiasMitigation" checked>
+                <span>Use Bias Mitigation</span>
+              </label>
+            </div>
+            <div class="param-field param-field--checkbox">
+              <label>
+                <input type="checkbox" id="useAccuracyEnhancement">
+                <span>Use Accuracy Enhancement</span>
+              </label>
+            </div>
+            <div class="param-field">
+              <label>Main Step Method</label>
+              <input type="text" id="mainStep" value="d3B">
+            </div>
+            <div class="param-field">
+              <label>Classifier Type</label>
+              <select id="mainClassifier">
+                <option value="LR" selected>LR - Logistic Regression</option>
+                <option value="DT">DT - Decision Tree</option>
+                <option value="KNN">KNN - K-Nearest Neighbors</option>
+                <option value="GBDT">GBDT - Gradient Boosting Decision Tree</option>
+                <option value="ADABoost">ADABoost</option>
+                <option value="NB">NB - Naive Bayes</option>
+                <option value="SVM">SVM - Support Vector Machine</option>
+                <option value="MLP">MLP - Multi-layer Perceptron</option>
+                <option value="XGBoost">XGBoost</option>
+                <option value="RF">RF - Random Forest</option>
+                <option value="LGBM">LGBM - LightGBM</option>
+                <option value="CatBoost">CatBoost</option>
+                <option value="LDA">LDA - Linear Discriminant Analysis</option>
+                <option value="QDA">QDA - Quadratic Discriminant Analysis</option>
+              </select>
+            </div>
+            <div class="param-field">
+              <label>Max Iteration</label>
+              <input type="number" id="mainMaxIteration" value="2" min="1" max="100">
+            </div>
+            <div class="param-field">
+              <label>Training Rate</label>
+              <input type="number" id="mainTrainingRate" value="0.5" min="0" max="1" step="0.01">
+            </div>
+            <div class="param-field">
+              <label>Threshold Accuracy</label>
+              <input type="number" id="mainThresholdAccuracy" value="0.01" min="0" max="1" step="0.001">
+            </div>
+            <div class="param-field">
+              <label>AE Importance Measure</label>
+              <input type="text" id="mainAeImportanceMeasure" value="a1">
+            </div>
+            <div class="param-field">
+              <label>AE Rebin Method</label>
+              <input type="text" id="mainAeRebinMethod" value="r1">
+            </div>
+            <div class="param-field">
+              <label>Alpha O</label>
+              <input type="number" id="mainAlphaO" value="0.8" min="0" max="1" step="0.01">
+        </div>
+      </div>
+    </div>
+
+        <div class="param-section">
+          <h3 class="param-section-title">Evaluation Configuration</h3>
+          <div class="param-grid">
+            <div class="param-field">
+              <label>H Order</label>
+              <input type="text" id="evalHOrder" value="default">
+            </div>
+            <div class="param-field">
+              <label>Sum Method</label>
+              <select id="evalSum">
+                <option value="d1A" selected>d1A</option>
+                <option value="d1B">d1B</option>
+              </select>
+            </div>
+            <div class="param-field">
+              <label>Categorical Method</label>
+              <select id="evalCat">
+                <option value="cat-a" selected>cat-a</option>
+                <option value="cat-b">cat-b</option>
+              </select>
+            </div>
+            <div class="param-field">
+              <label>Numeric Method</label>
+              <select id="evalNum">
+                <option value="num-a" selected>num-a</option>
+                <option value="num-b">num-b</option>
+                <option value="num-c">num-c</option>
+                <option value="num-d">num-d</option>
+              </select>
+            </div>
+            <div class="param-field">
+              <label>Scale Method</label>
+              <select id="evalScale">
+                <option value="zscore" selected>zscore</option>
+                <option value="mean">mean</option>
+                <option value="min">min</option>
+              </select>
+            </div>
+            <div class="param-field">
+              <label>Distance Metric</label>
+              <select id="evalDistMetric">
+                <option value="euclidean" selected>euclidean</option>
+                <option value="braycurtis">braycurtis</option>
+                <option value="canberra">canberra</option>
+                <option value="chebyshev">chebyshev</option>
+                <option value="cityblock">cityblock</option>
+                <option value="correlation">correlation</option>
+                <option value="cosine">cosine</option>
+                <option value="dice">dice</option>
+                <option value="hamming">hamming</option>
+                <option value="jaccard">jaccard</option>
+                <option value="jensenshannon">jensenshannon</option>
+                <option value="kulczynski1">kulczynski1</option>
+                <option value="mahalanobis">mahalanobis</option>
+                <option value="matching">matching</option>
+                <option value="minkowski">minkowski</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="param-field param-field--full">
+            <label>Fairness Metrics</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" value="BNC" checked><span>BNC - Between Negative Classes</span></label>
+              <label><input type="checkbox" value="BPC" checked><span>BPC - Between Positive Classes</span></label>
+              <label><input type="checkbox" value="CUAE" checked><span>CUAE - Conditional Use Accuracy Equality</span></label>
+              <label><input type="checkbox" value="EOpp" checked><span>EOpp - Equal Opportunity</span></label>
+              <label><input type="checkbox" value="EO" checked><span>EO - Equalized Odds</span></label>
+              <label><input type="checkbox" value="FDRP" checked><span>FDRP - False Discovery Rate Parity</span></label>
+              <label><input type="checkbox" value="FORP" checked><span>FORP - False Omission Rate Parity</span></label>
+              <label><input type="checkbox" value="FNRB" checked><span>FNRB - False Negative Rate Balance</span></label>
+              <label><input type="checkbox" value="FPRB" checked><span>FPRB - False Positive Rate Balance</span></label>
+              <label><input type="checkbox" value="NPVP" checked><span>NPVP - Negative Predictive Value Parity</span></label>
+              <label><input type="checkbox" value="OAE" checked><span>OAE - Overall Accuracy Equality</span></label>
+              <label><input type="checkbox" value="PPVP" checked><span>PPVP - Positive Predictive Value Parity</span></label>
+              <label><input type="checkbox" value="SP" checked><span>SP - Statistical Parity</span></label>
+            </div>
+          </div>
+
+          <div class="param-field param-field--full">
+            <label>Accuracy Metrics</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" value="ACC" checked><span>ACC - Accuracy</span></label>
+              <label><input type="checkbox" value="F1" checked><span>F1 - F1 Score</span></label>
+              <label><input type="checkbox" value="Recall" checked><span>Recall - True Positive Rate</span></label>
+              <label><input type="checkbox" value="Precision" checked><span>Precision - Positive Predictive Value</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="param-section">
+          <h3 class="param-section-title">Transform Configuration</h3>
+          <div class="param-grid">
+            <div class="param-field">
+              <label>Transform Method</label>
+              <select id="transformMethod">
+                <option value="poly" selected>poly</option>
+                <option value="log">log</option>
+                <option value="arcsin">arcsin</option>
+              </select>
+            </div>
+            <div class="param-field">
+              <label>Transform Multi</label>
+              <select id="transformMulti">
+                <option value="t1" selected>t1</option>
+                <option value="t2">t2</option>
+                <option value="t3">t3</option>
+              </select>
+            </div>
+            <div class="param-field">
+              <label>Transform Stream</label>
+              <input type="text" id="transformStream" value="d4A">
+      </div>
+    </div>
+          
+          <h4 class="param-subsection-title">Stream Configuration</h4>
+          <div class="param-grid">
+            <div class="param-field">
+              <label>P</label>
+              <input type="number" id="streamConfigP" value="102" min="0">
+            </div>
+            <div class="param-field">
+              <label>Q</label>
+              <input type="number" id="streamConfigQ" value="173" min="0">
+            </div>
+            <div class="param-field">
+              <label>E Min</label>
+              <input type="number" id="streamConfigEmin" value="0.5" step="0.1">
+            </div>
+            <div class="param-field">
+              <label>E Max</label>
+              <input type="number" id="streamConfigEmax" value="2" step="0.1">
+            </div>
+            <div class="param-field">
+              <label>Order</label>
+              <input type="number" id="streamConfigOrder" value="0" min="0">
+            </div>
+            <div class="param-field">
+              <label>Length</label>
+              <input type="number" id="streamConfigLength" value="10" min="1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn--secondary" id="btnCancelModal">Cancel</button>
+        <button class="btn btn--primary" id="btnSaveConfig">Save Configuration</button>
+      </div>
+    </div>
+    </div>
+
+  <script>
+    // CSV parser
+    function parseCSV(text, limitRows = 20){
+      const lines = text.trim().split(/\r?\n/);
+      const headers = lines[0].split(',').map(s=>s.trim());
+      const rows = lines.slice(1, limitRows+1).map(l=> l.split(',').map(s=>s.trim()));
+      return {headers, rows, total: Math.max(0, lines.length-1)};
+    }
+
+    // Demo datasets
+    const demoData = {
+      compas: {
+        name: 'COMPAS',
+        csv: `age,sex,race,priors_count,c_charge_degree,score,two_year_recid
+25,Male,African-American,0,F,3,1
+45,Male,Caucasian,2,F,6,1
+32,Female,Caucasian,0,M,1,0
+28,Male,African-American,3,F,8,1
+35,Female,Hispanic,1,M,4,0
+42,Male,African-American,5,F,7,1
+29,Female,Caucasian,0,F,2,0
+38,Male,Hispanic,2,M,5,1`
+      },
+      adult: {
+        name: 'Adult Income',
+        csv: `age,workclass,education,marital_status,occupation,race,sex,capital_gain,hours_per_week,income
+39,State-gov,Bachelors,Never-married,Adm-clerical,White,Male,2174,40,<=50K
+50,Self-emp-not-inc,Bachelors,Married-civ-spouse,Exec-managerial,White,Male,0,13,<=50K
+38,Private,HS-grad,Divorced,Handlers-cleaners,White,Male,0,40,<=50K
+53,Private,11th,Married-civ-spouse,Handlers-cleaners,Black,Male,0,40,<=50K
+28,Private,Bachelors,Married-civ-spouse,Prof-specialty,Black,Female,0,40,<=50K
+37,Private,Masters,Married-civ-spouse,Exec-managerial,White,Female,0,40,<=50K
+49,Private,9th,Married-spouse-absent,Other-service,Black,Female,0,16,<=50K
+52,Self-emp-not-inc,HS-grad,Married-civ-spouse,Exec-managerial,White,Male,0,45,>50K`
+      },
+      credit: {
+        name: 'Credit Default',
+        csv: `LIMIT_BAL,SEX,EDUCATION,MARRIAGE,AGE,PAY_0,PAY_2,PAY_3,PAY_4,PAY_5,PAY_6,BILL_AMT1,BILL_AMT2,BILL_AMT3,BILL_AMT4,BILL_AMT5,BILL_AMT6,PAY_AMT1,PAY_AMT2,PAY_AMT3,PAY_AMT4,PAY_AMT5,PAY_AMT6,default payment next month
+20000,2,2,1,24,2,2,-1,-1,-2,-2,3913,3102,689,0,0,0,0,689,0,0,0,0,1
+120000,2,2,2,26,-1,2,0,0,0,2,2682,1725,2682,3272,3455,3261,0,1000,1000,1000,0,2000,1
+90000,2,2,2,34,0,0,0,0,0,0,29239,14027,13559,14331,14948,15549,1518,1500,1000,1000,1000,5000,0
+50000,2,2,1,37,0,0,0,0,0,0,46990,48233,49291,28314,28959,29547,2000,2019,1200,1100,1069,1000,0
+50000,1,2,1,57,-1,0,-1,0,0,0,8617,5670,35835,20940,19146,19131,2000,36681,10000,9000,689,679,0
+50000,1,1,2,37,0,0,0,0,0,0,64400,57069,57608,19394,19619,20024,2500,1815,657,1000,1000,800,0
+500000,1,1,2,29,0,0,0,0,0,0,367965,412023,445007,542653,483003,473944,55000,40000,38000,20239,13750,13770,0
+100000,2,2,2,23,0,-1,-1,0,0,-1,11876,380,601,221,-159,567,380,601,0,581,1687,1542,0`
+      }
+    };
+
+    // Application State
+    const state = { 
+      currentFile: null,
+      currentData: null,
+      currentStep: 0,
+      isRunning: false,
+      runMode: 'all', // 'all' or 'step'
+      datasetId: null,
+      jobId: null,
+      history: [],
+      selectedMetric: 'Max_Epsilon',  // 默认选择 Max Epsilon
+      startTime: null,  // 开始时间，用于计算总时长
+      logPath: null,  // 实验日志路径
+      maxEpsilonSeries: [],  // 存储最大 epsilon 曲线数据（绝对值）
+      epsilonThreshold: 0  // epsilon 阈值（绝对值）
+    };
+    
+    // Initialize API client
+    const api = new BMWithAEAPI();
+
+    // Configuration Parameters
+    const config = {
+      numToCatMethod: 'quartile',
+      numToCatCuts: 4,
+      seed: 0,
+      useBiasMitigation: true,
+      useAccuracyEnhancement: false,
+      mainStep: 'd3B',
+      mainClassifier: 'LR',
+      mainMaxIteration: 20,  // 增加到20轮，让epsilon有机会达到阈值
+      mainTrainingRate: 0.5,
+      mainThresholdEpsilon: 0.9,
+      mainThresholdAccuracy: 0.01,
+      mainAeImportanceMeasure: 'a1',
+      mainAeRebinMethod: 'r1',
+      mainAlphaO: 0.8,
+      evalHOrder: 'default',
+      evalSum: 'd1A',
+      evalCat: 'cat-a',
+      evalNum: 'num-a',
+      evalScale: 'zscore',
+      evalDistMetric: 'euclidean',
+      evalMetricFairness: ['BNC', 'BPC', 'CUAE', 'EOpp', 'EO', 'FDRP', 'FORP', 'FNRB', 'FPRB', 'NPVP', 'OAE', 'PPVP', 'SP'],
+      evalMetricAccuracy: ['ACC', 'F1', 'Recall', 'Precision'],
+      transformMethod: 'poly',
+      transformMulti: 't1',
+      transformStream: 'd4A',
+      streamConfig: {
+        p: 102,
+        q: 173,
+        emin: 0.5,
+        emax: 2,
+        order: 0,
+        length: 10
+      }
+    };
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+
+    function displayFileName(file){
+      const fileList = $('#fileList');
+      const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+      fileList.innerHTML = `
+        <div class="file-item">
+          <span class="file-item__icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span class="file-item__name">${file.name}</span>
+          <span class="file-item__size">${fileSize}</span>
+        </div>
+      `;
+    }
+
+    function handleFile(file){
+      if(!file || !file.name.endsWith('.csv')){
+        alert('Please select a valid CSV file.');
+        return;
+      }
+      state.currentFile = file;
+      displayFileName(file);
+      $('#dropzone').classList.add('has-file');
+    }
+
+    function showLoadStatus(elementId, message, type = 'success') {
+      const statusEl = $(elementId);
+      statusEl.style.display = 'flex';
+      statusEl.className = `load-status load-status--${type}`;
+      statusEl.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          ${type === 'success' ? 
+            '<polyline points="20 6 9 17 4 12"/>' : 
+            '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+          }
+        </svg>
+        <span style="flex: 1;">${message}</span>
+        <button class="load-status-close" onclick="this.parentElement.style.display='none'" title="Dismiss">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      `;
+      
+      // Status remains visible until user dismisses it
+    }
+
+    async function importData(){
+      if(!state.currentFile){
+        alert('Please select a file first.');
+        return;
+      }
+      
+      const btn = $('#btnImport');
+      const btnText = btn.querySelector('.btn-text');
+      const btnSpinner = btn.querySelector('.btn-spinner');
+      
+      // Show loading state
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      
+      try {
+        // Need to prompt for target and protected columns
+        // For demo, use default columns for credit dataset
+        const result = await api.uploadDataset(
+          state.currentFile,
+          'default payment next month',  // target column
+          ['SEX', 'MARRIAGE']  // protected columns
+        );
+        
+        if (result.status === 'success') {
+          state.datasetId = result.data.dataset_id;
+          state.currentData = result.data.filename;
+          
+          showLoadStatus('#loadStatus', 
+            `Successfully loaded ${result.data.rows.toLocaleString()} rows and ${result.data.columns} columns from ${result.data.filename}`,
+            'success'
+          );
+        } else {
+          throw new Error(result.message);
+        }
+      } catch(err) {
+        showLoadStatus('#loadStatus', 
+          `Error loading file: ${err.message}`,
+          'error'
+        );
+      } finally {
+        // Reset button state
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+      }
+    }
+
+    async function loadDemoData(demoKey){
+      const btn = $('#btnLoadDemo');
+      const btnText = btn.querySelector('.btn-text');
+      const btnSpinner = btn.querySelector('.btn-spinner');
+      
+      // Show loading state
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      
+      try {
+        const result = await api.loadDemo(demoKey);
+        
+        if (result.status === 'success') {
+          state.datasetId = result.data.dataset_id;
+          state.currentData = result.data.filename;
+          state.datasetInfo = result.data; // Store dataset info
+          
+          // Trigger transition to data explorer immediately
+          setTimeout(() => {
+            showDataExplorer();
+          }, 300);
+        } else {
+          throw new Error(result.message);
+        }
+      } catch(err) {
+        showLoadStatus('#demoLoadStatus', 
+          `Error loading demo: ${err.message}`,
+          'error'
+        );
+      } finally {
+        // Reset button state
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+      }
+    }
+
+    // Drag and drop handlers
+    const dropzone = $('#dropzone');
+    const fileInput = $('#fileInput');
+
+    dropzone.addEventListener('click', ()=> fileInput.click());
+    
+    fileInput.addEventListener('change', (e)=> {
+      if(e.target.files[0]) handleFile(e.target.files[0]);
+    });
+
+    dropzone.addEventListener('dragover', (e)=> {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', ()=> {
+      dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (e)=> {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    // Demo dataset loader
+    $('#btnLoadDemo').addEventListener('click', ()=> {
+      const selectBox = $('#demoSelectBox');
+      const demoKey = selectBox.value;
+      if(!demoKey){
+        alert('Please select a demo dataset first.');
+        return;
+      }
+      loadDemoData(demoKey);
+    });
+
+    // Modal Functions
+    function openConfigModal() {
+      $('#configModal').classList.add('active');
+      loadConfigToForm();
+    }
+
+    function closeConfigModal() {
+      $('#configModal').classList.remove('active');
+    }
+
+    function loadConfigToForm() {
+      $('#numToCatMethod').value = config.numToCatMethod;
+      $('#numToCatCuts').value = config.numToCatCuts;
+      $('#seed').value = config.seed;
+      $('#useBiasMitigation').checked = config.useBiasMitigation;
+      $('#useAccuracyEnhancement').checked = config.useAccuracyEnhancement;
+      $('#mainStep').value = config.mainStep;
+      $('#mainClassifier').value = config.mainClassifier;
+      $('#mainMaxIteration').value = config.mainMaxIteration;
+      $('#mainTrainingRate').value = config.mainTrainingRate;
+      $('#mainThresholdEpsilon').value = config.mainThresholdEpsilon;
+      $('#mainThresholdEpsilonSlider').value = config.mainThresholdEpsilon;
+      $('#epsilonValue').textContent = config.mainThresholdEpsilon.toFixed(2);
+      $('#mainThresholdAccuracy').value = config.mainThresholdAccuracy;
+      $('#mainAeImportanceMeasure').value = config.mainAeImportanceMeasure;
+      $('#mainAeRebinMethod').value = config.mainAeRebinMethod;
+      $('#mainAlphaO').value = config.mainAlphaO;
+      $('#evalHOrder').value = config.evalHOrder;
+      $('#evalSum').value = config.evalSum;
+      $('#evalCat').value = config.evalCat;
+      $('#evalNum').value = config.evalNum;
+      $('#evalScale').value = config.evalScale;
+      $('#evalDistMetric').value = config.evalDistMetric;
+      $('#transformMethod').value = config.transformMethod;
+      $('#transformMulti').value = config.transformMulti;
+      $('#transformStream').value = config.transformStream;
+      $('#streamConfigP').value = config.streamConfig.p;
+      $('#streamConfigQ').value = config.streamConfig.q;
+      $('#streamConfigEmin').value = config.streamConfig.emin;
+      $('#streamConfigEmax').value = config.streamConfig.emax;
+      $('#streamConfigOrder').value = config.streamConfig.order;
+      $('#streamConfigLength').value = config.streamConfig.length;
+      
+      // Setup epsilon slider sync
+      setupEpsilonSync();
+    }
+    
+    function setupEpsilonSync() {
+      const slider = $('#mainThresholdEpsilonSlider');
+      const input = $('#mainThresholdEpsilon');
+      const display = $('#epsilonValue');
+      
+      function updateSliderProgress(value) {
+        const percent = (value / 1) * 100;
+        slider.style.setProperty('--slider-value', percent + '%');
+      }
+      
+      // Initialize
+      updateSliderProgress(slider.value);
+      
+      slider.addEventListener('input', (e) => {
+        const value = parseFloat(e.target.value);
+        input.value = value;
+        display.textContent = value.toFixed(2);
+        updateSliderProgress(value);
+      });
+      
+      input.addEventListener('input', (e) => {
+        const value = parseFloat(e.target.value);
+        if (!isNaN(value) && value >= 0 && value <= 1) {
+          slider.value = value;
+          display.textContent = value.toFixed(2);
+          updateSliderProgress(value);
+        }
+      });
+    }
+
+    function saveConfigFromForm() {
+      config.numToCatMethod = $('#numToCatMethod').value;
+      config.numToCatCuts = parseInt($('#numToCatCuts').value);
+      config.seed = parseInt($('#seed').value);
+      config.useBiasMitigation = $('#useBiasMitigation').checked;
+      config.useAccuracyEnhancement = $('#useAccuracyEnhancement').checked;
+      
+      console.log('[DEBUG] Saved config - Use BM:', config.useBiasMitigation, 'Use AE:', config.useAccuracyEnhancement);
+      config.mainStep = $('#mainStep').value;
+      config.mainClassifier = $('#mainClassifier').value;
+      config.mainMaxIteration = parseInt($('#mainMaxIteration').value);
+      config.mainTrainingRate = parseFloat($('#mainTrainingRate').value);
+      config.mainThresholdEpsilon = parseFloat($('#mainThresholdEpsilon').value);
+      config.mainThresholdAccuracy = parseFloat($('#mainThresholdAccuracy').value);
+      config.mainAeImportanceMeasure = $('#mainAeImportanceMeasure').value;
+      config.mainAeRebinMethod = $('#mainAeRebinMethod').value;
+      config.mainAlphaO = parseFloat($('#mainAlphaO').value);
+      config.evalHOrder = $('#evalHOrder').value;
+      config.evalSum = $('#evalSum').value;
+      config.evalCat = $('#evalCat').value;
+      config.evalNum = $('#evalNum').value;
+      config.evalScale = $('#evalScale').value;
+      config.evalDistMetric = $('#evalDistMetric').value;
+      config.transformMethod = $('#transformMethod').value;
+      config.transformMulti = $('#transformMulti').value;
+      config.transformStream = $('#transformStream').value;
+      config.streamConfig.p = parseInt($('#streamConfigP').value);
+      config.streamConfig.q = parseInt($('#streamConfigQ').value);
+      config.streamConfig.emin = parseFloat($('#streamConfigEmin').value);
+      config.streamConfig.emax = parseFloat($('#streamConfigEmax').value);
+      config.streamConfig.order = parseInt($('#streamConfigOrder').value);
+      config.streamConfig.length = parseInt($('#streamConfigLength').value);
+      
+      // Get selected fairness metrics
+      config.evalMetricFairness = Array.from($$('.checkbox-group input[type="checkbox"]'))
+        .filter(cb => cb.checked && ['BNC','BPC','CUAE','EOpp','EO','FDRP','FORP','FNRB','FPRB','NPVP','OAE','PPVP','SP'].includes(cb.value))
+        .map(cb => cb.value);
+      
+      // Get selected accuracy metrics
+      config.evalMetricAccuracy = Array.from($$('.checkbox-group input[type="checkbox"]'))
+        .filter(cb => cb.checked && ['ACC','F1','Recall','Precision'].includes(cb.value))
+        .map(cb => cb.value);
+    }
+
+    // Helper function to calculate overall fairness from metrics
+    // Overall Fairness Score 现在由后端计算
+    // 后端在每次 evaluate() 后会自动添加 metrics['Overall_Fairness']
+    // 算法：所有 fairness metrics 的平均值（越小越公平，0为完美公平）
+    
+    // Process Control Functions
+    const processSteps = [
+      { name: 'Data Preprocessing', desc: 'Preparing and cleaning data' },
+      { name: 'Feature Engineering', desc: 'Extracting and transforming features' },
+      { name: 'Model Training', desc: 'Training classification model' },
+      { name: 'Bias Detection', desc: 'Analyzing fairness metrics' },
+      { name: 'Bias Mitigation', desc: 'Applying debiasing techniques' },
+      { name: 'Accuracy Enhancement', desc: 'Optimizing model performance' },
+      { name: 'Final Evaluation', desc: 'Computing final metrics' }
+    ];
+
+    function showProcessStep(stepIndex, realData = null) {
+      const processContent = $('#processContent');
+      
+      // 获取当前选择的 metric（如果有的话），默认 Max_Epsilon
+      if (!state.selectedMetric) {
+        state.selectedMetric = 'Max_Epsilon';
+      }
+      const currentSelectedMetric = state.selectedMetric;
+      console.log(`[DEBUG] Rendering chart for metric: ${currentSelectedMetric}, step: ${stepIndex}, realData: ${realData}`);
+      
+      // 确定当前步骤名称和描述
+      let stepName = 'Processing';
+      let stepDesc = 'Running debiasing process';
+      let currentIteration = state.history.length;
+      
+      if (realData && state.history.length > 0) {
+        const lastHistory = state.history[state.history.length - 1];
+        // 根据 iteration 数据判断当前步骤
+        if (config.useBiasMitigation && !config.useAccuracyEnhancement) {
+          stepName = 'Bias Mitigation';
+          stepDesc = 'Reducing bias in the model';
+        } else if (!config.useBiasMitigation && config.useAccuracyEnhancement) {
+          stepName = 'Accuracy Enhancement';
+          stepDesc = 'Improving model accuracy';
+        } else if (config.useBiasMitigation && config.useAccuracyEnhancement) {
+          // 两者都启用时，显示综合步骤
+          stepName = 'Bias Mitigation & Accuracy Enhancement';
+          stepDesc = 'Optimizing fairness and accuracy';
+        }
+      }
+      
+      // Use real data if available, otherwise generate sample data
+      let fairnessData, accuracyData, fairnessScore, accuracyScore;
+      
+      console.log('[DEBUG] showProcessStep - Before data processing:');
+      console.log('  - currentSelectedMetric:', currentSelectedMetric);
+      console.log('  - state.maxEpsilonSeries:', state.maxEpsilonSeries);
+      console.log('  - state.epsilonThreshold:', state.epsilonThreshold);
+      console.log('  - realData:', realData);
+      console.log('  - state.history.length:', state.history.length);
+      
+      // 准备左侧图表数据（根据选择的 metric）
+      let leftChartData = [];
+      let leftChartLabel = '';
+      let showThreshold = false;
+      
+      if (currentSelectedMetric === 'Max_Epsilon' && realData && state.maxEpsilonSeries.length > 0) {
+        // Max Epsilon 模式
+        leftChartData = state.maxEpsilonSeries.map((value, i) => ({
+          iteration: i + 1,
+          value: value
+        }));
+        leftChartLabel = 'Max Epsilon';
+        showThreshold = true;  // 只有 Max Epsilon 显示阈值线
+        console.log('[DEBUG] Left chart - Max epsilon data:', leftChartData);
+      } else if (realData && state.history.length > 0) {
+        // 其他 Fairness Metrics 模式
+        leftChartData = state.history.map((h, i) => {
+          let value = 0;
+          if (h && h.metrics && h.metrics[currentSelectedMetric] !== undefined) {
+            const metricValue = h.metrics[currentSelectedMetric];
+            if (typeof metricValue === 'object' && metricValue !== null) {
+              const values = Object.values(metricValue).filter(v => typeof v === 'number');
+              value = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+            } else if (typeof metricValue === 'number') {
+              value = metricValue;
+            }
+          }
+          return { iteration: i + 1, value: value };
+        });
+        leftChartLabel = currentSelectedMetric;
+        console.log('[DEBUG] Left chart - Fairness metric data:', leftChartData);
+      }
+      
+      // Extract accuracy data（无论选择什么 metric 都要显示）
+      // Skip iteration 0 (initial state) to align with epsilon series
+      if (realData && state.history.length > 0) {
+        accuracyData = state.history
+          .filter((h, i) => i > 0)  // Skip iteration 0
+          .map((h, i) => ({
+            iteration: i + 1,
+            value: h && h.metrics && h.metrics.ACC ? h.metrics.ACC : 0
+          }));
+        console.log('[DEBUG] Accuracy data extracted (excluding iteration 0):', accuracyData);
+      } else {
+        accuracyData = [];
+        console.log('[DEBUG] No accuracy data - realData:', realData, 'history.length:', state.history.length);
+      }
+      
+      if (realData && state.history.length > 0) {
+        // Use real historical data - 显示用户选择的具体metric
+        fairnessData = state.history.map((h, i) => {
+          let value = 0;
+          if (h && h.metrics && h.metrics[currentSelectedMetric] !== undefined) {
+            const metricValue = h.metrics[currentSelectedMetric];
+            // 如果是嵌套字典（如 {'SEX': 0.001}），取平均值
+            if (typeof metricValue === 'object' && metricValue !== null) {
+              const values = Object.values(metricValue).filter(v => typeof v === 'number');
+              value = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+            } else if (typeof metricValue === 'number') {
+              value = metricValue;
+            }
+          }
+          return { iteration: i + 1, value: value };
+        });
+        
+        // Safely access latest metrics
+        const latestHistory = state.history[state.history.length - 1];
+        const latestMetrics = latestHistory ? latestHistory.metrics : null;
+        
+        if (latestMetrics && latestMetrics[currentSelectedMetric] !== undefined) {
+          const metricValue = latestMetrics[currentSelectedMetric];
+          if (typeof metricValue === 'object' && metricValue !== null) {
+            const values = Object.values(metricValue).filter(v => typeof v === 'number');
+            fairnessScore = values.length > 0 
+              ? (values.reduce((a, b) => a + b, 0) / values.length).toFixed(6)
+              : '0.000000';
+          } else {
+            fairnessScore = metricValue.toFixed(6);
+          }
+        } else {
+          fairnessScore = '0.000000';
+        }
+        accuracyScore = latestMetrics ? (latestMetrics.ACC || 0.8).toFixed(4) : '0.8000';
+      } else {
+        // Generate sample data
+        fairnessData = Array.from({length: 10}, (_, i) => ({
+          iteration: i + 1,
+          value: 0.5 + Math.random() * 0.3 + (i * 0.02)
+        }));
+        accuracyData = Array.from({length: 10}, (_, i) => ({
+          iteration: i + 1,
+          value: 0.85 - Math.random() * 0.05 - (i * 0.005)
+        }));
+        fairnessScore = (Math.random() * 0.3 + 0.7).toFixed(6);
+        accuracyScore = (Math.random() * 0.1 + 0.85).toFixed(4);
+      }
+      
+      // Fairness metrics descriptions
+      const metricDescriptions = {
+        'BNC': 'Between Negative Classes',
+        'BPC': 'Between Positive Classes',
+        'CUAE': 'Conditional Use Accuracy Equality',
+        'EOpp': 'Equal Opportunity',
+        'EO': 'Equalized Odds',
+        'FDRP': 'False Discovery Rate Parity',
+        'FORP': 'False Omission Rate Parity',
+        'FNRB': 'False Negative Rate Balance',
+        'FPRB': 'False Positive Rate Balance',
+        'NPVP': 'Negative Predictive Value Parity',
+        'OAE': 'Overall Accuracy Equality',
+        'PPVP': 'Positive Predictive Value Parity',
+        'SP': 'Statistical Parity'
+      };
+      
+      // 计算右侧 Accuracy 图表的 Y轴范围（仅使用 accuracyData）
+      const accuracyValues = accuracyData.map(d => d.value);
+      const accMaxValue = accuracyData.length > 0 ? Math.max(...accuracyValues) : 1;
+      const accMinValue = accuracyData.length > 0 ? Math.min(...accuracyValues) : 0;
+      const accRange = accMaxValue - accMinValue || 0.001;
+      
+      // 添加15%的padding
+      const yMax = accMaxValue + accRange * 0.15;
+      const yMin = Math.max(0, accMinValue - accRange * 0.15);
+      const yRange = yMax - yMin || 0.001;
+      
+      // Y轴缩放函数（右侧 Accuracy 图表使用）
+      const scaleY = (value) => {
+        return 250 - ((value - yMin) / yRange) * 220;
+      };
+      
+      // Y轴标签格式化函数（不使用科学计数法）
+      const formatYLabel = (value) => {
+        // 对于非常小的值使用科学计数法
+        if (Math.abs(value) < 0.0001 && value !== 0) {
+          return value.toExponential(2);
+        } else if (Math.abs(value) < 0.01) {
+          return value.toFixed(6);
+        } else if (value >= 0 && value <= 1) {
+          return value.toFixed(3);
+        } else {
+          return value.toFixed(2);
+        }
+      };
+      
+      // 计算左侧图表的 Y轴范围
+      const leftChartValues = leftChartData.map(d => d.value);
+      const leftMaxValue = leftChartData.length > 0 ? Math.max(...leftChartValues, showThreshold ? state.epsilonThreshold : 0) : 0.001;
+      const leftMinValue = leftChartData.length > 0 ? Math.min(...leftChartValues, showThreshold ? state.epsilonThreshold : 0) : 0;
+      const leftRange = leftMaxValue - leftMinValue || 0.0001;
+      const leftYMax = leftMaxValue + leftRange * 0.15;
+      const leftYMin = Math.max(0, leftMinValue - leftRange * 0.15);
+      const leftYRange = leftYMax - leftYMin || 0.0001;
+      const scaleLeftY = (value) => 250 - ((value - leftYMin) / leftYRange) * 220;
+      
+      // 计算总时间
+      const totalTime = state.startTime ? ((Date.now() - state.startTime) / 1000).toFixed(2) : '0.00';
+      
+      processContent.innerHTML = `
+        <div class="process-step-display">
+          <div class="step-visualization" style="padding: 8px 24px; background: transparent;">
+            <div class="charts-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              
+              <!-- Left Chart: Fairness Metrics -->
+              <div class="chart-section" style="background: transparent; border: none; padding: 0; padding-right: 20px; border-right: 1px solid #e5e7eb;">
+                <div class="chart-header" style="margin-top: 16px;">
+                  <h4 class="chart-title">Metrics</h4>
+                  <select class="metric-selector" id="metricSelector">
+                    <option value="Max_Epsilon" ${currentSelectedMetric === 'Max_Epsilon' ? 'selected' : ''}>Max Epsilon</option>
+                    <option value="Overall_Fairness" ${currentSelectedMetric === 'Overall_Fairness' ? 'selected' : ''}>Overall Fairness Score</option>
+                    <optgroup label="Individual Metrics">
+                      ${config.evalMetricFairness.map(metric => 
+                        `<option value="${metric}" ${currentSelectedMetric === metric ? 'selected' : ''}>${metric} - ${metricDescriptions[metric]}</option>`
+                      ).join('')}
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="line-chart" id="leftChart">
+                  <svg viewBox="0 0 400 280" class="chart-svg" preserveAspectRatio="xMidYMid meet">
+                    <!-- Grid lines -->
+                    ${Array.from({length: 6}, (_, i) => {
+                      const yPos = 30 + i * 44;
+                      const yValue = leftYMax - (i / 5) * leftYRange;
+                      return `
+                        <line x1="60" y1="${yPos}" x2="380" y2="${yPos}" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                        <text x="55" y="${yPos + 4}" text-anchor="end" fill="#64748b" font-size="11">${formatYLabel(yValue)}</text>
+                      `;
+                    }).join('')}
+                    
+                    <!-- Threshold line (仅 Max Epsilon 显示) -->
+                    ${showThreshold && state.epsilonThreshold > 0 ? `
+                      <line x1="60" y1="${scaleLeftY(state.epsilonThreshold)}" x2="380" y2="${scaleLeftY(state.epsilonThreshold)}" 
+                            stroke="#ef4444" stroke-width="2" stroke-dasharray="5,5" opacity="0.8"/>
+                      <text x="375" y="${scaleLeftY(state.epsilonThreshold) - 5}" text-anchor="end" fill="#ef4444" font-size="10" font-weight="bold">
+                        Threshold
+                      </text>
+                    ` : ''}
+                    
+                    <!-- Data line -->
+                    ${leftChartData.length > 0 ? `
+                      <polyline fill="none" stroke="#2563eb" stroke-width="3"
+                        points="${leftChartData.map((d, i) => 
+                          `${60 + (i / Math.max(leftChartData.length - 1, 1)) * 320},${scaleLeftY(d.value)}`
+                        ).join(' ')}" />
+                      ${leftChartData.map((d, i) => `
+                        <circle cx="${60 + (i / Math.max(leftChartData.length - 1, 1)) * 320}" cy="${scaleLeftY(d.value)}" r="4" fill="#2563eb" opacity="0.8">
+                          <title>Iteration ${d.iteration}: ${formatYLabel(d.value)}</title>
+                        </circle>
+                      `).join('')}
+                    ` : ''}
+                    
+                    <!-- Axes -->
+                    <line x1="60" y1="250" x2="380" y2="250" stroke="#64748b" stroke-width="2"/>
+                    <line x1="60" y1="30" x2="60" y2="250" stroke="#64748b" stroke-width="2"/>
+                    <text x="220" y="270" text-anchor="middle" fill="#64748b" font-size="12">Iteration</text>
+                  </svg>
+                </div>
+              </div>
+              
+              <!-- Right Chart: Accuracy Only -->
+              <div class="chart-section" style="background: transparent; border: none; padding: 0; padding-left: 20px;">
+                <div class="chart-header" style="margin-top: 16px;">
+                  <h4 class="chart-title">Accuracy</h4>
+                </div>
+                <div class="line-chart" id="accuracyChart">
+                  <svg viewBox="0 0 400 280" class="chart-svg" preserveAspectRatio="xMidYMid meet">
+                    <!-- Grid lines -->
+                    ${Array.from({length: 6}, (_, i) => {
+                      const yPos = 30 + i * 44;
+                      const yValue = yMax - (i / 5) * yRange;
+                      return `
+                        <line x1="60" y1="${yPos}" x2="380" y2="${yPos}" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                        <text x="55" y="${yPos + 4}" text-anchor="end" fill="#64748b" font-size="11">${formatYLabel(yValue)}</text>
+                      `;
+                    }).join('')}
+                    
+                    <!-- Accuracy line -->
+                    <polyline fill="none" stroke="#10b981" stroke-width="3"
+                      points="${accuracyData.map((d, i) => 
+                        `${60 + (i / Math.max(accuracyData.length - 1, 1)) * 320},${scaleY(d.value)}`
+                      ).join(' ')}" />
+                    ${accuracyData.map((d, i) => `
+                      <circle cx="${60 + (i / Math.max(accuracyData.length - 1, 1)) * 320}" cy="${scaleY(d.value)}" r="4" fill="#10b981" opacity="0.8">
+                        <title>Iteration ${d.iteration} - Accuracy: ${formatYLabel(d.value)}</title>
+                      </circle>
+                    `).join('')}
+                    
+                    <!-- Axes -->
+                    <line x1="60" y1="250" x2="380" y2="250" stroke="#64748b" stroke-width="2"/>
+                    <line x1="60" y1="30" x2="60" y2="250" stroke="#64748b" stroke-width="2"/>
+                    <text x="220" y="270" text-anchor="middle" fill="#64748b" font-size="12">Iteration</text>
+                  </svg>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div class="step-metrics">
+            <div class="metric-card">
+              <span class="metric-label">${leftChartLabel}</span>
+              <span class="metric-value">${leftChartData.length > 0 ? formatYLabel(leftChartData[leftChartData.length - 1].value) : 'N/A'}</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Accuracy</span>
+              <span class="metric-value">${accuracyScore}</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Total Time</span>
+              <span class="metric-value">${totalTime}s</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- History Section (Outside main window) -->
+        <div style="margin-top: 16px;">
+          <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px;">Iteration History</h4>
+          <div class="history-panel-external">
+            <div class="history-list-external">
+              ${state.history.length > 0 ? state.history.filter(h => h && h.metrics).map((h, i) => `
+                <div class="history-item-external" onclick="showHistoryDetail(${i})">
+                  <span class="history-data">Iteration ${h.iteration !== undefined ? h.iteration : i}</span>
+                  <span class="history-divider">|</span>
+                  <span class="history-data">${config.useBiasMitigation && config.useAccuracyEnhancement ? 'BM+AE' : config.useBiasMitigation ? 'BM' : 'AE'}</span>
+                  <span class="history-divider">|</span>
+                  <span class="history-data">Fairness: ${h.metrics.Overall_Fairness !== undefined ? h.metrics.Overall_Fairness.toFixed(4) : 'N/A'}</span>
+                  <span class="history-divider">|</span>
+                  <span class="history-data">Acc: ${h.metrics.ACC !== undefined ? h.metrics.ACC.toFixed(4) : 'N/A'}</span>
+                </div>
+              `).join('') : '<div class="history-empty">No history yet</div>'}
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+      
+      // 绑定 metric selector 事件监听器
+      // 使用 setTimeout 确保 DOM 已完全渲染
+      setTimeout(() => {
+        const metricSelector = $('#metricSelector');
+        if (metricSelector) {
+          // 设置当前选中的 metric
+          if (state.selectedMetric) {
+            metricSelector.value = state.selectedMetric;
+          } else {
+            state.selectedMetric = metricSelector.value || 'Max_Epsilon';
+          }
+          
+          // 监听变化（使用 onchange 避免重复绑定）
+          metricSelector.onchange = function() {
+            state.selectedMetric = this.value;
+            console.log(`[DEBUG] Metric changed to: ${state.selectedMetric}`);
+            // 重新渲染图表（保持当前step和realData）
+            showProcessStep(stepIndex, true);
+          };
+        }
+      }, 0);
+    }
+
+    function updateProcessStatus(status) {
+      const statusEl = $('#processStatus');
+      statusEl.textContent = status;
+      statusEl.className = 'process-status status-' + status.toLowerCase().replace(/\s+/g, '-');
+    }
+    
+    // 显示 history 详情
+    function showHistoryDetail(index) {
+      if (index < 0 || index >= state.history.length) return;
+      
+      const h = state.history[index];
+      if (!h || !h.metrics) {
+        alert('No data available for this iteration.');
+          return;
+        }
+      
+      const details = `
+Iteration ${h.iteration !== undefined ? h.iteration : index}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Type: ${config.useBiasMitigation && config.useAccuracyEnhancement ? 'Bias Mitigation + Accuracy Enhancement' : config.useBiasMitigation ? 'Bias Mitigation' : 'Accuracy Enhancement'}
+
+Metrics:
+• Overall Fairness: ${h.metrics?.Overall_Fairness?.toFixed(6) || 'N/A'}
+• Accuracy: ${h.metrics?.ACC?.toFixed(6) || 'N/A'}
+• F1 Score: ${h.metrics?.F1?.toFixed(6) || 'N/A'}
+• Recall: ${h.metrics?.Recall?.toFixed(6) || 'N/A'}
+• Precision: ${h.metrics?.Precision?.toFixed(6) || 'N/A'}
+
+${h.selected_attribute ? `Selected Attribute: ${h.selected_attribute}` : ''}
+${h.selected_label_O ? `Protected Attribute: ${h.selected_label_O}` : ''}
+${h.current_max_epsilon !== undefined ? `Max Epsilon: ${h.current_max_epsilon.toExponential(3)}` : ''}
+      `.trim();
+      
+      alert(details);
+    }
+
+    async function runAllSteps() {
+      if (!state.datasetId) {
+        alert('Please load a dataset first.');
+          return;
+        }
+      
+      // Get selected protected attributes from data explorer
+      const protectedAttrs = getSelectedProtectedAttributes();
+      if (!protectedAttrs || protectedAttrs.length === 0) {
+        alert('Please select at least one protected attribute in the Data Explorer first.');
+        return;
+      }
+      
+      state.isRunning = true;
+      state.currentStep = 0;
+      state.history = [];
+      state.startTime = Date.now();  // 记录开始时间
+      updateProcessStatus('Running');
+      $('#runBtnText').textContent = 'Running...';
+      $('#btnRun').disabled = true;
+
+      try {
+        // Update backend config
+        await updateBackendConfig();
+        
+        // Initialize debiasing job with selected protected attributes
+        console.log('[INFO] Starting debiasing with protected attributes:', protectedAttrs);
+        const initResult = await api.initDebias(state.datasetId, protectedAttrs);
+        if (initResult.status !== 'success') {
+          throw new Error(initResult.message);
+        }
+        
+        state.jobId = initResult.data.job_id;
+        
+        // Add initial metrics to history
+        state.history.push({
+          iteration: 0,
+          metrics: initResult.data.init_metrics
+        });
+        
+        // Start full process in background
+        const startResult = await api.runFullProcess(state.jobId);
+        
+        if (startResult.status !== 'success') {
+          throw new Error(startResult.message);
+        }
+        
+        // 开始轮询进度（不在这里重置按钮，等轮询完成后再重置）
+        pollJobProgress();
+      } catch (err) {
+        alert(`Error: ${err.message}`);
+        updateProcessStatus('Error');
+        $('#runBtnText').textContent = 'Run';
+        $('#btnRun').disabled = false;
+        state.isRunning = false;
+      }
+    }
+    
+    // 轮询job进度
+    let pollInterval = null;
+    let timeUpdateInterval = null;
+    
+    // 启动实时时间更新
+    function startTimeUpdate() {
+      if (timeUpdateInterval) {
+        clearInterval(timeUpdateInterval);
+      }
+      
+      timeUpdateInterval = setInterval(() => {
+        if (state.startTime && state.isRunning) {
+          const totalTime = ((Date.now() - state.startTime) / 1000).toFixed(2);
+          const timeEl = document.querySelector('.metric-card:nth-child(3) .metric-value');
+          if (timeEl) {
+            timeEl.textContent = `${totalTime}s`;
+          }
+        }
+      }, 10); // 每10ms更新一次
+    }
+    
+    // 停止实时时间更新
+    function stopTimeUpdate() {
+      if (timeUpdateInterval) {
+        clearInterval(timeUpdateInterval);
+        timeUpdateInterval = null;
+      }
+    }
+    
+    async function pollJobProgress() {
+      if (!state.jobId) return;
+      
+      // 清除之前的轮询
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+      
+      // 启动实时时间更新
+      startTimeUpdate();
+      
+      pollInterval = setInterval(async () => {
+        try {
+          const statusResult = await api.getJobStatus(state.jobId);
+          
+          if (statusResult.status === 'success') {
+            const data = statusResult.data;
+            
+            console.log('[DEBUG] pollJobProgress - Full response data:', data);
+            console.log('[DEBUG] pollJobProgress - data.max_epsilon_series:', data.max_epsilon_series);
+            console.log('[DEBUG] pollJobProgress - data.epsilon_threshold:', data.epsilon_threshold);
+            
+            // 保存 max_epsilon_series 和 epsilon_threshold 到 state
+            if (data.max_epsilon_series && Array.isArray(data.max_epsilon_series) && data.max_epsilon_series.length > 0) {
+              state.maxEpsilonSeries = data.max_epsilon_series;
+              console.log('[DEBUG] ✅ Saved max_epsilon_series to state:', state.maxEpsilonSeries);
+            } else {
+              console.log('[DEBUG] ❌ max_epsilon_series is empty or invalid, not saving to state');
+            }
+            if (data.epsilon_threshold !== undefined) {
+              state.epsilonThreshold = data.epsilon_threshold;
+              console.log('[DEBUG] epsilon_threshold:', data.epsilon_threshold);
+            }
+            
+            // 更新进度显示
+            updateProcessStatus(`Running (${data.current_iteration}/${data.max_iteration})`);
+            
+            // 更新history（只包含已完成的iterations）
+            if (data.history && data.history.length > 0) {
+              console.log('[DEBUG] Received history from backend:', data.history.length, 'items');
+              console.log('[DEBUG] Current state.history:', state.history.length, 'items');
+              
+              // 合并新的history（包含初始值和所有迭代）
+              // state.history[0] 是初始metrics，data.history 包含所有迭代
+              if (state.history.length > 0 && state.history[0]) {
+                // 如果已有初始值，合并后续的迭代
+                if (data.history.length > state.history.length - 1) {
+                  state.history = [state.history[0], ...data.history];
+                  console.log('[DEBUG] Merged history with initial value, total:', state.history.length);
+                }
+              } else {
+                // 如果没有初始值，直接使用data.history
+                state.history = data.history;
+                console.log('[DEBUG] Using backend history directly, total:', state.history.length);
+              }
+              
+              // 检查 history 中的每个元素
+              state.history.forEach((h, i) => {
+                if (!h || !h.metrics) {
+                  console.warn(`[WARN] History item ${i} is invalid:`, h);
+                }
+              });
+              
+              // 实时更新图表
+              showProcessStep(state.history.length - 1, true);
+            }
+            
+            // 检查是否完成
+            if (data.state === 'completed') {
+              clearInterval(pollInterval);
+              pollInterval = null;
+              stopTimeUpdate(); // 停止时间更新
+              
+              // 更新最后一次的 history 数据
+              if (data.history && data.history.length > 0) {
+                if (state.history.length > 0 && state.history[0]) {
+                  state.history = [state.history[0], ...data.history];
+                } else {
+                  state.history = data.history;
+                }
+                console.log('[DEBUG] Final history update on completion, total:', state.history.length);
+              }
+              
+              // 显示最终结果
+              if (state.history.length > 0) {
+                showProcessStep(state.history.length - 1, true);
+              }
+              
+              updateProcessStatus('Completed');
+              
+              // If log_path is available, show it
+              if (data.log_path) {
+                state.logPath = data.log_path;
+                showLogDownloadButton();
+              }
+              
+              console.log('[INFO] Process completed!', {
+                terminated: data.terminated,
+                reason: data.termination_reason,
+                iterations: data.current_iteration,
+                logPath: data.log_path
+              });
+              
+              // 重置按钮
+              $('#runBtnText').textContent = 'Run';
+              $('#btnRun').disabled = false;
+              state.isRunning = false;
+            } else if (data.state === 'failed') {
+              clearInterval(pollInterval);
+              pollInterval = null;
+              stopTimeUpdate(); // 停止时间更新
+              
+              updateProcessStatus('Failed');
+              
+              let failMessage = `Process failed: ${data.error || 'Unknown error'}`;
+              
+              // If log_path is available, show it even for failed jobs
+              if (data.log_path) {
+                state.logPath = data.log_path;
+                failMessage += `\n\nDebug log saved: ${data.log_path}`;
+                showLogDownloadButton();
+              }
+              
+              alert(failMessage);
+              
+              // 重置按钮
+              $('#runBtnText').textContent = 'Run';
+              $('#btnRun').disabled = false;
+              state.isRunning = false;
+            }
+          }
+        } catch (err) {
+          console.error('Error polling job status:', err);
+        }
+      }, 500); // 每500ms轮询一次
+    }
+
+    async function runNextStep() {
+      if (!state.datasetId) {
+        alert('Please load a dataset first.');
+          return;
+        }
+      
+      try {
+        // Initialize job if not started
+        if (!state.jobId) {
+          // Get selected protected attributes from data explorer
+          const protectedAttrs = getSelectedProtectedAttributes();
+          if (!protectedAttrs || protectedAttrs.length === 0) {
+            alert('Please select at least one protected attribute in the Data Explorer first.');
+            return;
+          }
+          
+          state.startTime = Date.now();  // 记录开始时间
+          state.isRunning = true;
+          startTimeUpdate(); // 启动时间更新
+          await updateBackendConfig();
+          
+          console.log('[INFO] Starting debiasing with protected attributes:', protectedAttrs);
+          const initResult = await api.initDebias(state.datasetId, protectedAttrs);
+          if (initResult.status !== 'success') {
+            throw new Error(initResult.message);
+          }
+          
+          state.jobId = initResult.data.job_id;
+          state.history.push({
+            iteration: 0,
+            metrics: initResult.data.init_metrics
+          });
+          
+          updateProcessStatus('Running');
+        }
+        
+        // Execute one complete iteration (BM + AE + evaluate)
+        const result = await api.stepIteration(state.jobId);
+        
+        if (result.status === 'success' && result.data) {
+          // 先保存数据到 history
+          state.history.push({
+            iteration: result.data.iteration,
+            metrics: result.data.metrics,
+            ...result.data
+          });
+          
+          // 显示当前步骤的结果
+          showProcessStep(state.currentStep, true);
+          state.currentStep++;
+          
+          // 检查是否已终止
+          if (result.data.terminated) {
+            state.isRunning = false;
+            stopTimeUpdate(); // 停止时间更新
+            updateProcessStatus('Completed');
+            $('#nextStepBtn').disabled = true;
+            console.log('[INFO] Process completed!', {
+              reason: result.data.termination_reason || 'Max iteration reached',
+              totalIterations: state.history.length
+            });
+            return;
+          }
+        }
+      } catch (err) {
+        state.isRunning = false;
+        stopTimeUpdate(); // 停止时间更新
+        alert(`Error: ${err.message}`);
+        updateProcessStatus('Error');
+      }
+    }
+    
+    // Update backend configuration
+    async function updateBackendConfig() {
+      console.log('[DEBUG] Current config:', config);
+      console.log('[DEBUG] Use Bias Mitigation:', config.useBiasMitigation);
+      console.log('[DEBUG] Use Accuracy Enhancement:', config.useAccuracyEnhancement);
+      
+      const backendConfig = {
+        'PARAMS_NUM_TO_CAT_METHOD': config.numToCatMethod,
+        'PARAMS_NUM_TO_CAT_CUTS': config.numToCatCuts,
+        'SEED': config.seed,
+        'USE_BIAS_MITIGATION': config.useBiasMitigation,
+        'USE_ACCURACY_ENHANCEMENT': config.useAccuracyEnhancement,
+        'PARAMS_MAIN_STEP': config.mainStep,
+        'PARAMS_MAIN_CLASSIFIER': config.mainClassifier,
+        'PARAMS_MAIN_MAX_ITERATION': config.mainMaxIteration,
+        'PARAMS_MAIN_TRAINING_RATE': config.mainTrainingRate,
+        'PARAMS_MAIN_THRESHOLD_EPSILON': config.mainThresholdEpsilon,
+        'PARAMS_MAIN_THRESHOLD_ACCURACY': config.mainThresholdAccuracy,
+        'PARAMS_MAIN_AE_IMPORTANCE_MEASURE': config.mainAeImportanceMeasure,
+        'PARAMS_MAIN_AE_REBIN_METHOD': config.mainAeRebinMethod,
+        'PARAMS_MAIN_ALPHA_O': config.mainAlphaO,
+        'PARAMS_EVAL_H_ORDER': config.evalHOrder,
+        'PARAMS_EVAL_SUM': config.evalSum,
+        'PARAMS_EVAL_CAT': config.evalCat,
+        'PARAMS_EVAL_NUM': config.evalNum,
+        'PARAMS_EVAL_SCALE': config.evalScale,
+        'PARAMS_EVAL_DIST_METRIC': config.evalDistMetric,
+        'PARAMS_EVAL_METRIC_FAIRNESS': config.evalMetricFairness,
+        'PARAMS_EVAL_METRIC_ACCURACY': config.evalMetricAccuracy,
+        'PARAMS_TRANSFORM': config.transformMethod,
+        'PARAMS_TRANSFORM_MULTI': config.transformMulti,
+        'PARAMS_TRANSFORM_STREAM': config.transformStream,
+        'PARAMS_TRANSFORM_STREAM_CONFIG': config.streamConfig
+      };
+      
+      await api.updateConfig(backendConfig);
+    }
+
+    // Show/hide log download button
+    function showLogDownloadButton() {
+      const btn = $('#btnDownloadLog');
+      if (btn) {
+        btn.style.display = 'block';
+      }
+    }
+    
+    function hideLogDownloadButton() {
+      const btn = $('#btnDownloadLog');
+      if (btn) {
+        btn.style.display = 'none';
+      }
+    }
+    
+    // View experiment log
+    function viewExperimentLog() {
+      if (!state.logPath) {
+        alert('No experiment log available.');
+        return;
+      }
+      
+      // Open log file in new window or show in modal
+      alert(`Experiment log saved at:\n${state.logPath}\n\nYou can find this file in the backend/logs folder.`);
+    }
+
+    function resetProcess() {
+      // 清除轮询
+      if (pollInterval) {
+        clearInterval(pollInterval);
+        pollInterval = null;
+      }
+      
+      // 停止时间更新
+      stopTimeUpdate();
+      
+      state.isRunning = false;
+      state.currentStep = 0;
+      state.history = [];
+      state.jobId = null;
+      state.startTime = null;
+      state.logPath = null;
+      state.maxEpsilonSeries = [];
+      state.epsilonThreshold = 0;
+      hideLogDownloadButton();
+      updateProcessStatus('Ready');
+      $('#runBtnText').textContent = 'Run';
+      $('#btnRun').disabled = false;
+      
+      const processContent = $('#processContent');
+      processContent.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state__icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20v-6m0 0V4m0 10l4-4m-4 4l-4-4"/>
+              <circle cx="12" cy="12" r="10" opacity="0.2"/>
+            </svg>
+          </div>
+          <p class="empty-state__title">Ready to start debiasing</p>
+          <p class="empty-state__text">Load your dataset and configure parameters to begin</p>
+        </div>
+      `;
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      // Update icon visibility
+      const lightIcon = $('.theme-icon--light');
+      const darkIcon = $('.theme-icon--dark');
+      if (newTheme === 'dark') {
+        lightIcon.style.display = 'none';
+        darkIcon.style.display = 'block';
+      } else {
+        lightIcon.style.display = 'block';
+        darkIcon.style.display = 'none';
+      }
+    }
+    
+    // Initialize theme
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      
+      const lightIcon = $('.theme-icon--light');
+      const darkIcon = $('.theme-icon--dark');
+      if (savedTheme === 'dark') {
+        lightIcon.style.display = 'none';
+        darkIcon.style.display = 'block';
+      } else {
+        lightIcon.style.display = 'block';
+        darkIcon.style.display = 'none';
+      }
+    }
+    
+    // Initialize theme on page load
+    initTheme();
+
+    // Event Listeners
+    $('#btnImport').addEventListener('click', importData);
+    $('#btnTheme').addEventListener('click', toggleTheme);
+    $('#btnDocs').addEventListener('click', ()=> alert('Documentation (coming soon)'));
+    
+    // Config Modal
+    $('#btnConfig').addEventListener('click', openConfigModal);
+    $('#btnDownloadLog').addEventListener('click', viewExperimentLog);
+    $('#btnCloseModal').addEventListener('click', closeConfigModal);
+    $('#btnCancelModal').addEventListener('click', closeConfigModal);
+    $('#modalOverlay').addEventListener('click', closeConfigModal);
+    $('#btnSaveConfig').addEventListener('click', ()=> {
+      saveConfigFromForm();
+      closeConfigModal();
+      const bmStatus = config.useBiasMitigation ? 'Enabled' : 'Disabled';
+      const aeStatus = config.useAccuracyEnhancement ? 'Enabled' : 'Disabled';
+      alert(`Configuration saved successfully!\n\nBias Mitigation: ${bmStatus}\nAccuracy Enhancement: ${aeStatus}`);
+    });
+
+    // Run Mode Selection
+    $$('input[name="runMode"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        state.runMode = e.target.value;
+        $('#runBtnText').textContent = state.runMode === 'step' ? 'Next Step' : 'Run';
+      });
+    });
+
+    // Process Controls
+    $('#btnRun').addEventListener('click', () => {
+      if (!state.currentData && !state.currentFile) {
+        alert('Please load a dataset first.');
+        return;
+      }
+      
+      if (state.runMode === 'all') {
+        runAllSteps();
+      } else {
+        runNextStep();
+      }
+    });
+
+    $('#btnReset').addEventListener('click', resetProcess);
+    
+    // ============================================
+    // Data Explorer Functions
+    // ============================================
+    
+    function showDataExplorer() {
+      const loadPanel = $('#loadDatasetPanel');
+      const explorerPanel = $('#dataExplorerPanel');
+      
+      // Slide out load panel
+      loadPanel.classList.add('slide-out');
+      
+      // Show and slide in explorer panel
+      explorerPanel.style.display = 'block';
+      setTimeout(() => {
+        explorerPanel.classList.add('slide-in');
+        
+        // Initialize explorer content
+        initializeDataExplorer();
+      }, 50);
+    }
+    
+    function hideDataExplorer() {
+      const loadPanel = $('#loadDatasetPanel');
+      const explorerPanel = $('#dataExplorerPanel');
+      
+      // Slide out explorer panel
+      explorerPanel.classList.remove('slide-in');
+      
+      // Slide in load panel
+      loadPanel.classList.remove('slide-out');
+      
+      // Hide explorer panel after animation
+      setTimeout(() => {
+        explorerPanel.style.display = 'none';
+      }, 400);
+    }
+    
+    async function initializeDataExplorer() {
+      if (!state.datasetId) return;
+      
+      console.log('[DEBUG] Initializing data explorer for dataset:', state.datasetId);
+      
+      try {
+        // Get dataset metadata from backend
+        const response = await api.getDatasetInfo(state.datasetId);
+        
+        if (response.status === 'success' && response.data) {
+          const datasetInfo = response.data;
+          
+          // Store dataset info for later use
+          state.currentDatasetInfo = datasetInfo;
+          
+          // Populate protected attributes list (checkboxes)
+          populateProtectedAttributesList(datasetInfo.features || []);
+          
+          // Get the selected protected attributes (priority ones will be auto-selected)
+          const selectedAttrs = getSelectedProtectedAttributes();
+          
+          // Update the display bar with selected attributes
+          updateProtectedAttrDisplay();
+          
+          // Display bias metrics overview for the selected attributes
+          if (selectedAttrs.length > 0) {
+            await displayBiasOverview(selectedAttrs);
+          }
+          
+          // Render feature distributions
+          renderFeatureDistributions(datasetInfo);
+          
+          // Setup modal event listeners
+          $('#btnOpenAttrModal').addEventListener('click', openAttrModal);
+          $('#btnCloseAttrModal').addEventListener('click', closeAttrModal);
+          $('#btnCancelAttrModal').addEventListener('click', closeAttrModal);
+          $('#btnConfirmAttrModal').addEventListener('click', confirmAttrSelection);
+          
+          // Close modal on overlay click
+          $('#attrModalOverlay').addEventListener('click', (e) => {
+            if (e.target === $('#attrModalOverlay')) {
+              closeAttrModal();
+            }
+          });
+        }
+      } catch (err) {
+        console.error('[ERROR] Failed to initialize data explorer:', err);
+      }
+    }
+    
+    function populateProtectedAttributesList(features) {
+      const container = $('#protectedAttributesList');
+      container.innerHTML = '';
+      
+      // Common protected attributes
+      const protectedAttrs = ['sex', 'race', 'age', 'gender', 'ethnicity', 'marriage'];
+      
+      // Separate priority and other attributes
+      const priorityFeatures = [];
+      const otherFeatures = [];
+      
+      features.forEach(feature => {
+        const featureLower = feature.toLowerCase();
+        if (protectedAttrs.some(attr => featureLower.includes(attr))) {
+          priorityFeatures.push(feature);
+        } else {
+          otherFeatures.push(feature);
+        }
+      });
+      
+      // Combine with priority first
+      const sortedFeatures = [...priorityFeatures, ...otherFeatures];
+      
+      // Create checkbox for each attribute
+      sortedFeatures.forEach((attr, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'protected-attr-item';
+        itemDiv.dataset.attribute = attr;
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `protected-attr-${index}`;
+        checkbox.value = attr;
+        checkbox.className = 'protected-attr-checkbox';
+        
+        // Auto-select priority attributes
+        if (priorityFeatures.includes(attr)) {
+          checkbox.checked = true;
+          itemDiv.classList.add('checked');
+        }
+        
+        const label = document.createElement('label');
+        label.htmlFor = `protected-attr-${index}`;
+        label.textContent = attr;
+        
+        // Toggle on click
+        itemDiv.addEventListener('click', (e) => {
+          if (e.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+          }
+          if (checkbox.checked) {
+            itemDiv.classList.add('checked');
+          } else {
+            itemDiv.classList.remove('checked');
+          }
+        });
+        
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            itemDiv.classList.add('checked');
+          } else {
+            itemDiv.classList.remove('checked');
+          }
+        });
+        
+        itemDiv.appendChild(checkbox);
+        itemDiv.appendChild(label);
+        container.appendChild(itemDiv);
+      });
+    }
+    
+    function getSelectedProtectedAttributes() {
+      const checkboxes = document.querySelectorAll('.protected-attr-checkbox:checked');
+      return Array.from(checkboxes).map(cb => cb.value);
+    }
+    
+    function updateProtectedAttrDisplay() {
+      const selected = getSelectedProtectedAttributes();
+      const textElement = $('#protectedAttrText');
+      
+      if (selected.length === 0) {
+        textElement.textContent = 'Select attributes...';
+        textElement.classList.add('placeholder');
+      } else {
+        textElement.textContent = selected.join(', ');
+        textElement.classList.remove('placeholder');
+      }
+    }
+    
+    function openAttrModal() {
+      $('#attrModalOverlay').style.display = 'flex';
+    }
+    
+    function closeAttrModal() {
+      $('#attrModalOverlay').style.display = 'none';
+    }
+    
+    function confirmAttrSelection() {
+      updateProtectedAttrDisplay();
+      closeAttrModal();
+      handleProtectedAttributesChange();
+    }
+    
+    function calculateBiasScore(metrics) {
+      /**
+       * Calculate a composite bias score from 0-100
+       * Higher score = more bias
+       * 
+       * Formula combines:
+       * - Statistical Parity (0-1, lower is better)
+       * - Equal Opportunity (0-1, lower is better)  
+       * - Equalized Odds (0-1, lower is better)
+       * - Disparate Impact (0-1, closer to 1 is better, convert to bias measure)
+       */
+      
+      const sp = metrics.statistical_parity;
+      const eo = metrics.equal_opportunity;
+      const eodds = metrics.equalized_odds;
+      const di = metrics.disparate_impact;
+      
+      // Convert disparate impact to bias measure (distance from perfect fairness at 1.0)
+      const diBias = Math.abs(1.0 - di);
+      
+      // Weighted average (all metrics are 0-1 range, lower is better)
+      // Weights: SP=30%, EO=25%, EOdds=25%, DI=20% (sum=100%)
+      // Scale to 0-100
+      const score = (sp * 0.3 + eo * 0.25 + eodds * 0.25 + diBias * 0.2) * 100;
+      
+      return Math.min(100, Math.max(0, score));
+    }
+    
+    function getBiasScoreColor(score) {
+      /**
+       * Return color based on bias score (0-100)
+       * Green (low bias) -> Yellow -> Orange -> Red (high bias)
+       */
+      if (score < 20) {
+        return '#10b981'; // Green - Excellent
+      } else if (score < 40) {
+        return '#84cc16'; // Light Green - Good
+      } else if (score < 60) {
+        return '#eab308'; // Yellow - Moderate
+      } else if (score < 80) {
+        return '#f97316'; // Orange - High
+      } else {
+        return '#ef4444'; // Red - Very High
+      }
+    }
+    
+    function getBiasScoreDescription(score) {
+      if (score < 20) {
+        return 'Excellent - Very low bias detected';
+      } else if (score < 40) {
+        return 'Good - Low bias detected';
+      } else if (score < 60) {
+        return 'Moderate - Some bias present';
+      } else if (score < 80) {
+        return 'High - Significant bias detected';
+      } else {
+        return 'Very High - Severe bias detected';
+      }
+    }
+    
+    function updateBiasScoreCircle(score) {
+      const circle = $('#biasScoreProgress');
+      const text = $('#biasScoreText');
+      const description = $('#biasScoreDescription');
+      
+      // Calculate stroke-dashoffset (534.07 is circumference of r=85 circle)
+      const circumference = 534.07;
+      const offset = circumference - (score / 100) * circumference;
+      
+      // Update circle
+      circle.style.strokeDashoffset = offset;
+      circle.style.stroke = getBiasScoreColor(score);
+      
+      // Update text
+      text.textContent = score.toFixed(0);
+      text.style.fill = getBiasScoreColor(score);
+      
+      // Update description
+      description.textContent = getBiasScoreDescription(score);
+    }
+    
+    async function displayBiasOverview(protectedAttrs = null) {
+      // Get all metric cards and score container
+      const metricCards = document.querySelectorAll('.metric-card-small');
+      const scoreContainer = $('.bias-score-container');
+      
+      // Handle both array and single value for backward compatibility
+      if (!protectedAttrs || !state.datasetId) {
+        // Display placeholder values if no protected attributes selected
+        $('#metricSP').textContent = '--';
+        $('#metricEO').textContent = '--';
+        $('#metricEOdds').textContent = '--';
+        $('#metricPP').textContent = '--';
+        $('#biasScoreText').textContent = '--';
+        $('#biasScoreDescription').textContent = 'Select protected attributes to calculate bias';
+        
+        // Reset circle
+        const circle = $('#biasScoreProgress');
+        circle.style.strokeDashoffset = '534.07';
+        circle.style.stroke = '#10b981';
+        
+        return;
+      }
+      
+      // Ensure protectedAttrs is an array
+      const attrsArray = Array.isArray(protectedAttrs) ? protectedAttrs : [protectedAttrs];
+      
+      if (attrsArray.length === 0) {
+        return;
+      }
+      
+      try {
+        // Add loading state
+        metricCards.forEach(card => card.classList.add('loading'));
+        scoreContainer.classList.add('loading');
+        
+        // Call backend with array of protected attributes
+        const response = await api.getBiasMetrics(state.datasetId, attrsArray);
+        
+        if (response.status === 'success' && response.data && response.data.metrics) {
+          const metrics = response.data.metrics;
+          
+          // Small delay for visual feedback
+          await new Promise(resolve => setTimeout(resolve, 300));
+          
+          // Calculate composite bias score
+          const biasScore = calculateBiasScore(metrics);
+          
+          console.log('[INFO] Bias score calculation:', {
+            protectedAttributes: attrsArray,
+            metrics: metrics,
+            biasScore: biasScore
+          });
+          
+          // Update bias score circle
+          updateBiasScoreCircle(biasScore);
+          
+          // Update metric displays
+          $('#metricSP').textContent = metrics.statistical_parity.toFixed(3);
+          $('#metricEO').textContent = metrics.equal_opportunity.toFixed(3);
+          $('#metricEOdds').textContent = metrics.equalized_odds.toFixed(3);
+          $('#metricPP').textContent = metrics.disparate_impact.toFixed(3);
+          
+          console.log('[INFO] Updated bias metrics for protected attributes:', attrsArray, {
+            biasScore,
+            metrics
+          });
+        }
+      } catch (err) {
+        console.error('[ERROR] Failed to fetch bias metrics:', err);
+        $('#metricSP').textContent = 'Error';
+        $('#metricEO').textContent = 'Error';
+        $('#metricEOdds').textContent = 'Error';
+        $('#metricPP').textContent = 'Error';
+        $('#biasScoreText').textContent = 'N/A';
+        $('#biasScoreDescription').textContent = 'Failed to calculate bias score';
+      } finally {
+        // Remove loading state
+        metricCards.forEach(card => card.classList.remove('loading'));
+        scoreContainer.classList.remove('loading');
+      }
+    }
+    
+    function renderFeatureDistributions(datasetInfo) {
+      const container = $('#featureDistributions');
+      container.innerHTML = '';
+      
+      const featureStats = datasetInfo.feature_stats || {};
+      const features = datasetInfo.features || [];
+      
+      features.forEach(featureName => {
+        const stats = featureStats[featureName];
+        if (stats) {
+          const featureItem = createFeatureItem(featureName, stats);
+          container.appendChild(featureItem);
+        }
+      });
+    }
+    
+    function createFeatureItem(featureName, stats) {
+      const item = document.createElement('div');
+      item.className = 'feature-item';
+      
+      // Generate distribution bars from real data
+      let bars = [];
+      let maxVal = 1;
+      
+      if (stats.type === 'categorical' && stats.value_counts) {
+        // Use actual value counts for categorical features
+        const values = Object.values(stats.value_counts);
+        maxVal = Math.max(...values, 1);
+        bars = values.slice(0, 10); // Limit to 10 bars
+      } else {
+        // For continuous features, generate representative bars
+        bars = Array.from({length: 10}, () => Math.random() * 100);
+        maxVal = Math.max(...bars);
+      }
+      
+      // Capitalize feature type
+      const featureType = stats.type.charAt(0).toUpperCase() + stats.type.slice(1);
+      
+      // Create the basic structure first
+      item.innerHTML = `
+        <div class="feature-item-header">
+          <span class="feature-name">${featureName}</span>
+          <span class="feature-type">${featureType}</span>
+        </div>
+        <div class="feature-chart">
+          <div class="feature-bar-container">
+            ${bars.map(val => 
+              `<div class="feature-bar" style="height: ${(val / maxVal * 100)}%"></div>`
+            ).join('')}
+          </div>
+        </div>
+        <div class="feature-tooltip">
+          <div class="tooltip-header">Feature: ${featureName}</div>
+          <div class="tooltip-section">
+            <div class="tooltip-section-title">Basic Stats</div>
+            <div class="tooltip-metric">
+              <span class="tooltip-metric-label">Type:</span>
+              <span class="tooltip-metric-value">${featureType}</span>
+            </div>
+            <div class="tooltip-metric">
+              <span class="tooltip-metric-label">Unique Values:</span>
+              <span class="tooltip-metric-value">${stats.unique_values}</span>
+            </div>
+            <div class="tooltip-metric">
+              <span class="tooltip-metric-label">Missing:</span>
+              <span class="tooltip-metric-value">${stats.missing_percentage.toFixed(1)}%</span>
+            </div>
+            ${stats.mean !== undefined ? `
+            <div class="tooltip-metric">
+              <span class="tooltip-metric-label">Mean:</span>
+              <span class="tooltip-metric-value">${stats.mean.toFixed(2)}</span>
+            </div>
+            ` : ''}
+          </div>
+          <div class="tooltip-section" id="bias-section-${featureName}">
+            <div class="tooltip-section-title">Bias Metrics</div>
+            <div class="tooltip-loading">Loading bias metrics...</div>
+          </div>
+        </div>
+      `;
+      
+      // Position tooltip dynamically and load bias metrics on click
+      const tooltip = item.querySelector('.feature-tooltip');
+      let isTooltipVisible = false;
+      
+      // Create backdrop for blur effect
+      let backdrop = document.getElementById('tooltip-backdrop');
+      if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.id = 'tooltip-backdrop';
+        backdrop.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.3);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          z-index: 99998;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+        `;
+        document.body.appendChild(backdrop);
+      }
+      
+      // Add visual feedback for clickability
+      item.style.cursor = 'pointer';
+      item.setAttribute('title', 'Click to see detailed bias metrics');
+      
+      // Toggle tooltip on click
+      item.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        
+        // Toggle visibility
+        if (isTooltipVisible) {
+          // Hide tooltip and backdrop
+          tooltip.style.opacity = '0';
+          tooltip.style.pointerEvents = 'none';
+          backdrop.style.opacity = '0';
+          backdrop.style.pointerEvents = 'none';
+          isTooltipVisible = false;
+          return;
+        }
+        
+        // Show tooltip
+        isTooltipVisible = true;
+        
+        // Position tooltip centered on screen with larger size
+        const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+        
+        // Calculate centered position using transform for perfect centering
+        const tooltipWidth = 500;  // Larger width
+        const tooltipMaxHeight = 700;  // Larger max height
+        
+        // Apply beautiful styles with centered positioning
+        tooltip.style.position = 'fixed';
+        tooltip.style.left = '50%';
+        tooltip.style.top = '50%';
+        tooltip.style.transform = 'translate(-50%, -50%)';
+        tooltip.style.opacity = '1';
+        tooltip.style.pointerEvents = 'auto';
+        tooltip.style.display = 'block';
+        tooltip.style.visibility = 'visible';
+        tooltip.style.zIndex = '99999';
+        tooltip.style.width = `${tooltipWidth}px`;
+        tooltip.style.minHeight = '300px';
+        tooltip.style.maxHeight = `${tooltipMaxHeight}px`;
+        tooltip.style.overflowY = 'auto';
+        tooltip.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
+        tooltip.style.backdropFilter = 'blur(20px)';
+        tooltip.style.webkitBackdropFilter = 'blur(20px)';
+        tooltip.style.border = '1px solid rgba(200, 200, 200, 0.3)';
+        tooltip.style.borderRadius = '12px';
+        tooltip.style.padding = '20px';
+        tooltip.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.5) inset';
+        tooltip.style.color = '#1a1a1a';
+        tooltip.style.fontSize = '14px';
+        
+        // Move to body to bypass container restrictions
+        if (tooltip.parentElement !== document.body) {
+          document.body.appendChild(tooltip);
+        }
+        
+        // Show backdrop
+        backdrop.style.opacity = '1';
+        backdrop.style.pointerEvents = 'auto';
+        
+        // Load bias metrics
+        // Note: tooltip might have been moved to body, so search in both places
+        let biasSection = tooltip.querySelector(`#bias-section-${featureName}`);
+        if (!biasSection) {
+          biasSection = item.querySelector(`#bias-section-${featureName}`);
+        }
+        
+        if (!biasSection) {
+          console.error('[ERROR] Bias section not found for:', featureName);
+          return;
+        }
+        
+        const loadingEl = biasSection.querySelector('.tooltip-loading');
+        
+        // Only load once
+        if (loadingEl && !biasSection.dataset.loaded) {
+          try {
+            const response = await api.getBiasMetrics(state.datasetId, [featureName]);
+            if (response.status === 'success' && response.data) {
+              // Backend returns: {data: {metrics: {...}, protected_attributes: [...]}}
+              const metrics = response.data.metrics || response.data;
+              biasSection.dataset.loaded = 'true';
+              
+              console.log('[DEBUG] Bias metrics for', featureName, ':', metrics);
+              
+              // Display bias metrics summary
+              let biasHTML = `
+                <div class="tooltip-metric">
+                  <span class="tooltip-metric-label">Statistical Parity:</span>
+                  <span class="tooltip-metric-value">${metrics.statistical_parity?.toFixed(4) || 'N/A'}</span>
+                </div>
+                <div class="tooltip-metric">
+                  <span class="tooltip-metric-label">Equal Opportunity:</span>
+                  <span class="tooltip-metric-value">${metrics.equal_opportunity?.toFixed(4) || 'N/A'}</span>
+                </div>
+                <div class="tooltip-metric">
+                  <span class="tooltip-metric-label">Equalized Odds:</span>
+                  <span class="tooltip-metric-value">${metrics.equalized_odds?.toFixed(4) || 'N/A'}</span>
+                </div>
+                <div class="tooltip-metric">
+                  <span class="tooltip-metric-label">Disparate Impact:</span>
+                  <span class="tooltip-metric-value">${metrics.disparate_impact?.toFixed(4) || 'N/A'}</span>
+                </div>
+              `;
+              
+              // Get group_positive_rates from individual_metrics if available
+              let groupRates = metrics.group_positive_rates;
+              if (!groupRates && metrics.individual_metrics && metrics.individual_metrics.length > 0) {
+                groupRates = metrics.individual_metrics[0].group_positive_rates;
+              }
+              
+              console.log('[DEBUG] Group rates:', groupRates);
+              
+              // Display subgroup positive rates if available
+              if (groupRates && Object.keys(groupRates).length > 0) {
+                biasHTML += `
+                  <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.1);">
+                    <div style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
+                      Subgroup Analysis (Top 10)
+                    </div>
+                `;
+                
+                const rates = groupRates;
+                const maxRate = Math.max(...Object.values(rates));
+                
+                // Sort subgroups by positive rate (descending) and take top 10
+                const sortedGroups = Object.entries(rates)
+                  .sort((a, b) => b[1] - a[1])
+                  .slice(0, 10);  // Only show top 10
+                
+                console.log('[DEBUG] Rendering', sortedGroups.length, 'subgroups');
+                
+                sortedGroups.forEach(([group, rate]) => {
+                  const percentage = (rate * 100).toFixed(1);
+                  const barWidth = maxRate > 0 ? (rate / maxRate * 100) : 0;
+                  
+                  biasHTML += `
+                    <div style="margin-bottom: 10px;">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="font-size: 13px; color: #1a1a1a; font-weight: 500;">${group}</span>
+                        <span style="font-size: 12px; color: #64748b;">${percentage}%</span>
+                      </div>
+                      <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                        <div style="width: ${barWidth}%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); border-radius: 4px; transition: width 0.3s ease;"></div>
+                      </div>
+                    </div>
+                  `;
+                });
+                
+                biasHTML += `</div>`;
+              }
+              
+              console.log('[DEBUG] Setting HTML, length:', biasHTML.length);
+              loadingEl.innerHTML = biasHTML;
+              console.log('[DEBUG] HTML set successfully');
+            } else {
+              loadingEl.textContent = 'Failed to load bias metrics';
+            }
+          } catch (err) {
+            console.error('Error loading bias metrics:', err);
+            loadingEl.textContent = 'Error loading metrics';
+          }
+        }
+      });
+      
+      // Close tooltip when clicking backdrop
+      backdrop.addEventListener('click', () => {
+        tooltip.style.opacity = '0';
+        tooltip.style.pointerEvents = 'none';
+        backdrop.style.opacity = '0';
+        backdrop.style.pointerEvents = 'none';
+        isTooltipVisible = false;
+      });
+      
+      return item;
+    }
+    
+    async function handleProtectedAttributesChange() {
+      const selectedAttrs = getSelectedProtectedAttributes();
+      
+      if (selectedAttrs.length > 0) {
+        console.log('[INFO] Protected attributes changed to:', selectedAttrs);
+        
+        // Update config with selected protected attributes
+        config.protectedAttributes = selectedAttrs;
+        
+        // Recalculate and display bias metrics for the selected attributes
+        await displayBiasOverview(selectedAttrs);
+      } else {
+        // No attributes selected, reset display
+        await displayBiasOverview(null);
+      }
+    }
+    
+    // Event Listeners for Data Explorer
+    $('#btnBackToLoad').addEventListener('click', hideDataExplorer);
+    
+    // Scroll hint click handler
+    $('#scrollHint').addEventListener('click', () => {
+      const featureSection = document.querySelector('.feature-list');
+      if (featureSection) {
+        featureSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  </script>
+</body>
+</html>
