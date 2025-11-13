@@ -1,0 +1,27 @@
+[Unit]
+Description=BMWithAE Backend Service
+After=network.target
+
+[Service]
+Type=notify
+# IMPORTANT: Change these to your actual user/group
+User=your-username
+Group=your-username
+# IMPORTANT: Change this to your actual installation path
+WorkingDirectory=/opt/BMWithAE/backend
+Environment="FLASK_ENV=production"
+Environment="FLASK_HOST=0.0.0.0"
+Environment="FLASK_PORT=5001"
+Environment="PATH=/opt/BMWithAE/venv/bin"
+# IMPORTANT: Change this to your actual venv path
+ExecStart=/opt/BMWithAE/venv/bin/gunicorn --workers 4 --bind 0.0.0.0:5001 --timeout 120 --access-logfile logs/access.log --error-logfile logs/error.log wsgi:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+

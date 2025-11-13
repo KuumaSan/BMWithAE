@@ -190,6 +190,25 @@ class BMWithAEAPI {
     );
     return await response.json();
   }
+
+  /**
+   * Get subgroup performance metrics
+   * @param {string} datasetId - Dataset ID
+   * @param {Object} conditions - Subgroup conditions (e.g., {'AGE': 25, 'SEX': 'M'})
+   */
+  async getSubgroupMetrics(datasetId, conditions) {
+    const response = await fetch(
+      `${this.baseURL}/data/${datasetId || this.currentDatasetId}/subgroup-metrics`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ conditions })
+      }
+    );
+    return await response.json();
+  }
 }
 
 // Export for use in index.html

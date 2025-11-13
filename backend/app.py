@@ -546,6 +546,133 @@ def get_bias_metrics(dataset_id):
         traceback.print_exc()
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/api/data/<dataset_id>/subgroup-metrics', methods=['POST'])
+def get_subgroup_metrics(dataset_id):
+    """Calculate performance metrics for a specific subgroup defined by conditions"""
+    try:
+        if dataset_id not in datasets:
+            return jsonify({'status': 'error', 'message': 'Dataset not found'}), 404
+        
+        data = request.json
+        conditions = data.get('conditions', {})  # e.g., {'AGE': 25, 'SEX': 'M'}
+        
+        if not conditions:
+            return jsonify({'status': 'error', 'message': 'No conditions specified'}), 400
+        
+        dataset = datasets[dataset_id]
+        filepath = dataset['filepath']
+        target_col = dataset.get('target_column')
+        
+        if not target_col:
+            return jsonify({'status': 'error', 'message': 'Target column not found'}), 400
+        
+        # Load dataframe
+        df = load_file_to_dataframe(filepath)
+        
+        # Filter dataframe based on conditions
+        filtered_df = df.copy()
+        for feature, value in conditions.items():
+            if feature not in df.columns:
+                return jsonify({'status': 'error', 'message': f'Feature {feature} not found'}), 400
+            filtered_df = filtered_df[filtered_df[feature] == value]
+        
+        # Calculate subgroup size
+        subgroup_size = len(filtered_df)
+        overall_size = len(df)
+        
+        if subgroup_size == 0:
+            return jsonify({'status': 'error', 'message': 'No samples match the specified conditions'}), 400
+        
+        # Calculate overall metrics for comparison
+        from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+        from sklearn.model_selection import train_test_split
+        from sklearn.linear_model import LogisticRegression
+        
+        # Prepare data
+        X = df.drop(columns=[target_col])
+        y = df[target_col]
+        
+        # Convert categorical columns to numeric
+        X_encoded = pd.get_dummies(X, drop_first=True)
+        
+        # Train a simple model on overall data
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_encoded, y, test_size=0.3, random_state=42, stratify=y if len(y.unique()) > 1 else None
+        )
+        
+        model = LogisticRegression(max_iter=1000, random_state=42)
+        model.fit(X_train, y_train)
+        
+        # Calculate overall metrics
+        y_pred_overall = model.predict(X_test)
+        overall_metrics = {
+            'accuracy': float(accuracy_score(y_test, y_pred_overall)),
+            'precision': float(precision_score(y_test, y_pred_overall, average='binary', zero_division=0)),
+            'recall': float(recall_score(y_test, y_pred_overall, average='binary', zero_division=0)),
+            'f1': float(f1_score(y_test, y_pred_overall, average='binary', zero_division=0))
+        }
+        
+        # Calculate FPR for overall
+        try:
+            cm_overall = confusion_matrix(y_test, y_pred_overall)
+            if cm_overall.shape == (2, 2):
+                tn, fp, fn, tp = cm_overall.ravel()
+                overall_metrics['fpr'] = float(fp / (fp + tn)) if (fp + tn) > 0 else 0.0
+            else:
+                overall_metrics['fpr'] = 0.0
+        except:
+            overall_metrics['fpr'] = 0.0
+        
+        # Calculate subgroup metrics
+        X_subgroup = filtered_df.drop(columns=[target_col])
+        y_subgroup = filtered_df[target_col]
+        
+        # Encode subgroup data (use same columns as training data)
+        X_subgroup_encoded = pd.get_dummies(X_subgroup, drop_first=True)
+        # Align columns with training data
+        for col in X_encoded.columns:
+            if col not in X_subgroup_encoded.columns:
+                X_subgroup_encoded[col] = 0
+        X_subgroup_encoded = X_subgroup_encoded[X_encoded.columns]
+        
+        # Predict on subgroup
+        y_pred_subgroup = model.predict(X_subgroup_encoded)
+        
+        subgroup_metrics = {
+            'accuracy': float(accuracy_score(y_subgroup, y_pred_subgroup)),
+            'precision': float(precision_score(y_subgroup, y_pred_subgroup, average='binary', zero_division=0)),
+            'recall': float(recall_score(y_subgroup, y_pred_subgroup, average='binary', zero_division=0)),
+            'f1': float(f1_score(y_subgroup, y_pred_subgroup, average='binary', zero_division=0))
+        }
+        
+        # Calculate FPR for subgroup
+        try:
+            cm_subgroup = confusion_matrix(y_subgroup, y_pred_subgroup)
+            if cm_subgroup.shape == (2, 2):
+                tn, fp, fn, tp = cm_subgroup.ravel()
+                subgroup_metrics['fpr'] = float(fp / (fp + tn)) if (fp + tn) > 0 else 0.0
+            else:
+                subgroup_metrics['fpr'] = 0.0
+        except:
+            subgroup_metrics['fpr'] = 0.0
+        
+        return jsonify({
+            'status': 'success',
+            'data': {
+                'subgroup_size': int(subgroup_size),
+                'overall_size': int(overall_size),
+                'subgroup_percentage': float(subgroup_size / overall_size * 100),
+                'conditions': conditions,
+                'subgroup_metrics': subgroup_metrics,
+                'overall_metrics': overall_metrics
+            }
+        })
+    
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 # ============================================
 # API: Configuration
 # ============================================
@@ -1293,6 +1420,10 @@ if __name__ == '__main__':
     print(f"Server running at: http://{backend_config.HOST}:{backend_config.PORT}")
     print(f"API endpoints available at: http://{backend_config.HOST}:{backend_config.PORT}/api/")
     print("\nPress Ctrl+C to stop the server")
+    print("=" * 60)
+    print("\n⚠️  WARNING: Using Flask development server")
+    print("For production deployment, use a WSGI server like Gunicorn:")
+    print(f"  gunicorn -w 4 -b {backend_config.HOST}:{backend_config.PORT} wsgi:app")
     print("=" * 60)
     app.run(
         host=backend_config.HOST, 
